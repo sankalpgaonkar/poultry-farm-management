@@ -41,6 +41,20 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api/smart', smartRoutes);
 
+app.get('/api/health', (req, res) => {
+  const mongoose = require('mongoose');
+  res.json({
+    status: 'ok',
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    readyState: mongoose.connection.readyState,
+    env: {
+      hasMongoUri: !!process.env.MONGO_URI,
+      hasJwtSecret: !!process.env.JWT_SECRET,
+      hasOpenAiKey: !!process.env.OPENAI_API_KEY
+    }
+  });
+});
+
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
