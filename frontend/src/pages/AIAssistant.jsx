@@ -31,7 +31,7 @@ export default function AIAssistant({ isFloating = false }) {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       
-      const { data } = await axios.post('http://localhost:5000/api/ai/chat', { message: userMessage.text }, config);
+      const { data } = await axios.post('/api/ai/chat', { message: userMessage.text }, config);
       
       setMessages(prev => [...prev, { text: data.reply, sender: 'ai' }]);
     } catch (err) {

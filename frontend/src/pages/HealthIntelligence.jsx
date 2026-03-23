@@ -22,7 +22,7 @@ export default function HealthIntelligence() {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       
-      const res = await axios.post('http://localhost:5000/api/health/analyze', { symptoms: symptomsArray }, config);
+      const res = await axios.post('/api/health/analyze', { symptoms: symptomsArray }, config);
       setResults(res.data);
     } catch (err) {
       console.error(err);

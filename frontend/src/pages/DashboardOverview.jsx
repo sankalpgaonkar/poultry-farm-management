@@ -14,13 +14,13 @@ export default function DashboardOverview() {
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
         const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
         
-        const resAlerts = await axios.get('http://localhost:5000/api/ai/alerts', config);
+        const resAlerts = await axios.get('/api/ai/alerts', config);
         setAlerts(resAlerts.data);
         
-        const resFarms = await axios.get('http://localhost:5000/api/farms', config);
+        const resFarms = await axios.get('/api/farms', config);
         setFarms(resFarms.data);
 
-        const resLogs = await axios.get('http://localhost:5000/api/logs', config);
+        const resLogs = await axios.get('/api/logs', config);
         setLogs(resLogs.data.reverse()); // Keep chronological for charts
       } catch (err) {
         console.error('Failed to fetch dashboard data', err);

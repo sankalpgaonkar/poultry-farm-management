@@ -12,7 +12,7 @@ export default function Inventory() {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const res = await axios.get('http://localhost:5000/api/inventory', config);
+      const res = await axios.get('/api/inventory', config);
       setItems(res.data.items);
       setAlerts(res.data.alerts);
     } catch (err) {
@@ -37,7 +37,7 @@ export default function Inventory() {
         dailyConsumptionRate: Number(formData.dailyConsumptionRate) || 0
       };
 
-      await axios.post('http://localhost:5000/api/inventory', payload, config);
+      await axios.post('/api/inventory', payload, config);
       setShowModal(false);
       setFormData({ itemName: '', category: 'Feed', quantity: '', unit: 'kg', lowStockThreshold: '', dailyConsumptionRate: '' });
       fetchInventory();
@@ -51,7 +51,7 @@ export default function Inventory() {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.delete(`http://localhost:5000/api/inventory/${id}`, config);
+      await axios.delete(`/api/inventory/${id}`, config);
       fetchInventory();
     } catch (err) {
       console.error(err);

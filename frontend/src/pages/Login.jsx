@@ -11,7 +11,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { identifier, password });
+      const { data } = await axios.post('/api/auth/login', { identifier, password });
       localStorage.setItem('userInfo', JSON.stringify(data));
       if (data.role === 'Farmer') {
         navigate('/farmer');

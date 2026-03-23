@@ -21,7 +21,7 @@ export default function FarmManagement() {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const { data } = await axios.get('http://localhost:5000/api/farms', config);
+      const { data } = await axios.get('/api/farms', config);
       setFarms(data);
     } catch (err) {
       console.error(err);
@@ -37,7 +37,7 @@ export default function FarmManagement() {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.post('http://localhost:5000/api/farms', { name: farmName, location, totalChickens: Number(chickens) }, config);
+      await axios.post('/api/farms', { name: farmName, location, totalChickens: Number(chickens) }, config);
       setShowFarmModal(false);
       setFarmName(''); setLocation(''); setChickens('');
       fetchFarms();
@@ -51,7 +51,7 @@ export default function FarmManagement() {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.post('http://localhost:5000/api/logs', {
+      await axios.post('/api/logs', {
         farmId: selectedFarm,
         totalEggs: Number(eggs),
         temperature: Number(temperature),

@@ -12,7 +12,7 @@ export default function Community() {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const res = await axios.get('http://localhost:5000/api/community', config);
+      const res = await axios.get('/api/community', config);
       setPosts(res.data);
     } catch (err) {
       console.error(err);
@@ -28,7 +28,7 @@ export default function Community() {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.post('http://localhost:5000/api/community', { title, content, tags: ['General'] }, config);
+      await axios.post('/api/community', { title, content, tags: ['General'] }, config);
       setTitle('');
       setContent('');
       setShowForm(false);
@@ -42,7 +42,7 @@ export default function Community() {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.put(`http://localhost:5000/api/community/${id}/upvote`, {}, config);
+      await axios.put(`/api/community/${id}/upvote`, {}, config);
       fetchPosts(); // Refresh upvotes
     } catch (err) {
       console.error(err);

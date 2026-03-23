@@ -14,7 +14,7 @@ export default function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/register', { name, email, phone, password, role });
+      const { data } = await axios.post('/api/auth/register', { name, email, phone, password, role });
       localStorage.setItem('userInfo', JSON.stringify(data));
       if (data.role === 'Farmer') {
         navigate('/farmer');

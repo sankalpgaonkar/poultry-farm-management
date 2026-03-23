@@ -14,7 +14,7 @@ export default function BuyerMarketplace() {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       
-      const res = await axios.get('http://localhost:5000/api/marketplace', config);
+      const res = await axios.get('/api/marketplace', config);
       setListings(res.data);
     } catch (err) {
       console.error(err);
@@ -64,7 +64,7 @@ export default function BuyerMarketplace() {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       
-      await axios.post('http://localhost:5000/api/marketplace/orders', {
+      await axios.post('/api/marketplace/orders', {
         listingId: selectedListing._id,
         quantityOrdered: Number(orderQuantity) || 1
       }, config);

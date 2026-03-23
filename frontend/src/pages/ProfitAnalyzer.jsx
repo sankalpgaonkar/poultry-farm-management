@@ -36,7 +36,7 @@ export default function ProfitAnalyzer() {
         utilitiesCostDaily: Number(formData.utilitiesCostDaily) || 0
       };
 
-      const res = await axios.post('http://localhost:5000/api/finance/calculate', payload, config);
+      const res = await axios.post('/api/finance/calculate', payload, config);
       setResult(res.data);
     } catch (err) {
       console.error(err);

@@ -14,9 +14,9 @@ export default function SmartFeatures() {
         const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
         
         const [schRes, buyRes, repRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/smart/schemes', config),
-          axios.get('http://localhost:5000/api/smart/buyer-matches', config),
-          axios.get('http://localhost:5000/api/smart/daily-report', config)
+          axios.get('/api/smart/schemes', config),
+          axios.get('/api/smart/buyer-matches', config),
+          axios.get('/api/smart/daily-report', config)
         ]);
         
         setSchemes(schRes.data);

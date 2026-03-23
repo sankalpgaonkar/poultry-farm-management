@@ -36,7 +36,7 @@ export default function EggPrediction() {
           humidity: Number(formData.humidity) || 0,
           lighting: Number(formData.lighting) || 0
         };
-        const { data } = await axios.post('http://localhost:5000/api/ai/predict', payload, config);
+        const { data } = await axios.post('/api/ai/predict', payload, config);
         setResult(data);
       } catch (err) {
         console.error(err);

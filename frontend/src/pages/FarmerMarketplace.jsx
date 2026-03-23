@@ -16,10 +16,10 @@ export default function FarmerMarketplace() {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       
-      const resListings = await axios.get('http://localhost:5000/api/marketplace/my-listings', config);
+      const resListings = await axios.get('/api/marketplace/my-listings', config);
       setListings(resListings.data);
 
-      const resOrders = await axios.get('http://localhost:5000/api/marketplace/orders', config);
+      const resOrders = await axios.get('/api/marketplace/orders', config);
       setOrders(resOrders.data);
     } catch (err) {
       console.error(err);
@@ -69,7 +69,7 @@ export default function FarmerMarketplace() {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       
-      await axios.post('http://localhost:5000/api/marketplace', {
+      await axios.post('/api/marketplace', {
         productName,
         quantity: Number(quantity),
         pricePerUnit: Number(price)
@@ -88,7 +88,7 @@ export default function FarmerMarketplace() {
     try {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.delete(`http://localhost:5000/api/marketplace/${id}`, config);
+      await axios.delete(`/api/marketplace/${id}`, config);
       fetchData();
     } catch (err) {
       console.error(err);
@@ -101,7 +101,7 @@ export default function FarmerMarketplace() {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
       
-      await axios.put(`http://localhost:5000/api/marketplace/orders/${orderId}/status`, { status }, config);
+      await axios.put(`/api/marketplace/orders/${orderId}/status`, { status }, config);
       fetchData();
     } catch (err) {
       console.error(err);
