@@ -4,16 +4,48 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 
 dotenv.config();
-connectDB();
 
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+console.log('Backend starting...');
+console.log('Environment check:', {
+  NODE_ENV: process.env.NODE_ENV,
+  VERCEL: process.env.VERCEL,
+  hasMongoUri: !!(process.env.MONGO_URI || process.env.MONGO_MONGODB_URI),
+  hasJwtSecret: !!process.env.JWT_SECRET
+});
+
+// Global Error Handlers for better Vercel logs
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION! 💥', err);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION! 💥', err);
+});
+
+// REMOVED connectDB() here to avoid blocking cold starts
+// connectDB();
 
 const app = express();
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+
+app.use(async (req, res, next) => {
+  try {
+    const mongoose = require('mongoose');
+    if (mongoose.connection.readyState !== 1) {
+      console.log('Database not connected. Attempting to connect...');
+      await connectDB();
+    }
+    next();
+  } catch (error) {
+    console.error('Database connection middleware error:', error);
+    next(error);
+  }
+});
 
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 1000 });
 app.use('/api', limiter);
@@ -41,6 +73,14 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api/smart', smartRoutes);
 
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'Backend is reachable', 
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV
+  });
+});
+
 app.get('/api/health', (req, res) => {
   const mongoose = require('mongoose');
   res.json({
@@ -48,9 +88,10 @@ app.get('/api/health', (req, res) => {
     database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
     readyState: mongoose.connection.readyState,
     env: {
-      hasMongoUri: !!process.env.MONGO_URI,
+      hasMongoUri: !!(process.env.MONGO_URI || process.env.MONGO_MONGODB_URI),
       hasJwtSecret: !!process.env.JWT_SECRET,
-      hasOpenAiKey: !!process.env.OPENAI_API_KEY
+      hasOpenAiKey: !!process.env.OPENAI_API_KEY,
+      usingFallbackUri: !process.env.MONGO_URI && !!process.env.MONGO_MONGODB_URI
     }
   });
 });

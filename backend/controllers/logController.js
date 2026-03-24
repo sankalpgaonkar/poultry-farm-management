@@ -18,7 +18,7 @@ const getLogs = async (req, res) => {
 
 const createLog = async (req, res) => {
   try {
-    const { farmId, date, totalEggs, temperature, humidity, feedConsumed, mortalityCount } = req.body;
+    const { farmId, date, totalEggs, temperature, humidity, feedConsumed, mortalityCount, currentChickenCount } = req.body;
     
     // Check if farm belongs to farmer
     const farm = await Farm.findById(farmId);
@@ -33,12 +33,16 @@ const createLog = async (req, res) => {
       totalEggs,
       temperature,
       humidity,
+      currentChickenCount: currentChickenCount || farm.totalChickens,
       feedConsumed,
       mortalityCount
     });
 
-    // Update farm chicken count based on mortality
-    if (mortalityCount && mortalityCount > 0) {
+    // Update farm chicken count based on input
+    if (currentChickenCount) {
+      farm.totalChickens = currentChickenCount;
+      await farm.save();
+    } else if (mortalityCount && mortalityCount > 0) {
       farm.totalChickens = Math.max(0, farm.totalChickens - mortalityCount);
       await farm.save();
     }

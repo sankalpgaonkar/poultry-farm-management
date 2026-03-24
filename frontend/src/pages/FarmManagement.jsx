@@ -16,6 +16,7 @@ export default function FarmManagement() {
   const [eggs, setEggs] = useState('');
   const [temperature, setTemperature] = useState('');
   const [feed, setFeed] = useState('');
+  const [currentChickens, setCurrentChickens] = useState('');
 
   const fetchFarms = async () => {
     try {
@@ -55,11 +56,13 @@ export default function FarmManagement() {
         farmId: selectedFarm,
         totalEggs: Number(eggs),
         temperature: Number(temperature),
-        feedConsumed: Number(feed)
+        feedConsumed: Number(feed),
+        currentChickenCount: Number(currentChickens)
       }, config);
       setShowLogModal(false);
-      setEggs(''); setTemperature(''); setFeed('');
+      setEggs(''); setTemperature(''); setFeed(''); setCurrentChickens('');
       alert('Daily log added successfully!');
+      fetchFarms(); // Refresh to show updated chicken count
     } catch (err) {
       console.error(err);
     }
@@ -102,7 +105,11 @@ export default function FarmManagement() {
                 </div>
               </div>
               <button
-                onClick={() => { setSelectedFarm(farm._id); setShowLogModal(true); }}
+                onClick={() => { 
+                  setSelectedFarm(farm._id); 
+                  setCurrentChickens(farm.totalChickens);
+                  setShowLogModal(true); 
+                }}
                 className="w-full bg-brand-50 hover:bg-brand-100 text-brand-700 font-medium py-2 rounded-lg text-sm transition-colors border border-brand-200"
               >
                 Log Daily Data
@@ -145,9 +152,15 @@ export default function FarmManagement() {
           <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
             <h2 className="text-xl font-bold mb-4 text-gray-900">Daily Log Entry</h2>
             <form onSubmit={handleAddLog} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Total Eggs Collected</label>
-                <input required type="number" className="w-full border px-3 py-2 rounded-lg" value={eggs} onChange={e => setEggs(e.target.value)} />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Total Chickens</label>
+                  <input required type="number" className="w-full border px-3 py-2 rounded-lg bg-brand-50 font-semibold" value={currentChickens} onChange={e => setCurrentChickens(e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Total Eggs Collected</label>
+                  <input required type="number" className="w-full border px-3 py-2 rounded-lg" value={eggs} onChange={e => setEggs(e.target.value)} />
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Avg Temperature (°C)</label>
@@ -165,6 +178,7 @@ export default function FarmManagement() {
           </div>
         </div>
       )}
+
     </div>
   );
 }

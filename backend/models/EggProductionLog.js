@@ -27,6 +27,10 @@ const eggProductionLogSchema = new mongoose.Schema({
   humidity: {
     type: Number
   },
+  currentChickenCount: {
+    type: Number,
+    required: true
+  },
   feedConsumed: {
     type: Number, // kg
     required: true
