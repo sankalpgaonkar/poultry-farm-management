@@ -37,13 +37,16 @@ app.use(async (req, res, next) => {
   try {
     const mongoose = require('mongoose');
     if (mongoose.connection.readyState !== 1) {
-      console.log('Database not connected. Attempting to connect...');
+      console.log(`[DB] Not connected (State: ${mongoose.connection.readyState}). Attempting connection...`);
       await connectDB();
     }
     next();
   } catch (error) {
-    console.error('Database connection middleware error:', error);
-    next(error);
+    console.error('[DB] Middleware connection fail:', error.message);
+    res.status(503).json({ 
+      message: 'Database connection failed. Please try again in 10 seconds.',
+      error: error.message 
+    });
   }
 });
 
