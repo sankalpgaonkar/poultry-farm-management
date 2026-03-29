@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { Plus, Package, IndianRupee, Trash2 } from 'lucide-react';
 
 export default function FarmerMarketplace() {
   const [listings, setListings] = useState([]);
   const [orders, setOrders] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [productName, setProductName] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -13,16 +14,17 @@ export default function FarmerMarketplace() {
 
   const fetchData = async () => {
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      
-      const resListings = await axios.get('/api/marketplace/my-listings', config);
+      setLoading(true);
+      const [resListings, resOrders] = await Promise.all([
+        api.get('/marketplace/my-listings'),
+        api.get('/marketplace/orders')
+      ]);
       setListings(resListings.data);
-
-      const resOrders = await axios.get('/api/marketplace/orders', config);
       setOrders(resOrders.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 

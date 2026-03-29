@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { Plus, CheckCircle2 } from 'lucide-react';
 
 export default function FarmManagement() {
@@ -7,6 +7,7 @@ export default function FarmManagement() {
   const [showFarmModal, setShowFarmModal] = useState(false);
   const [showLogModal, setShowLogModal] = useState(false);
   const [selectedFarm, setSelectedFarm] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Form states
   const [farmName, setFarmName] = useState('');
@@ -20,12 +21,13 @@ export default function FarmManagement() {
 
   const fetchFarms = async () => {
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const { data } = await axios.get('/api/farms', config);
+      setLoading(true);
+      const { data } = await api.get('/farms');
       setFarms(data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,9 +38,7 @@ export default function FarmManagement() {
   const handleCreateFarm = async (e) => {
     e.preventDefault();
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.post('/api/farms', { name: farmName, location, totalChickens: Number(chickens) }, config);
+      await api.post('/farms', { name: farmName, location, totalChickens: Number(chickens) });
       setShowFarmModal(false);
       setFarmName(''); setLocation(''); setChickens('');
       fetchFarms();
@@ -50,15 +50,13 @@ export default function FarmManagement() {
   const handleAddLog = async (e) => {
     e.preventDefault();
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.post('/api/logs', {
+      await api.post('/logs', {
         farmId: selectedFarm,
         totalEggs: Number(eggs),
         temperature: Number(temperature),
         feedConsumed: Number(feed),
         currentChickenCount: Number(currentChickens)
-      }, config);
+      });
       setShowLogModal(false);
       setEggs(''); setTemperature(''); setFeed(''); setCurrentChickens('');
       alert('Daily log added successfully!');

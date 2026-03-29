@@ -60,7 +60,7 @@ const registerUser = async (req, res) => {
 
 const authUser = async (req, res) => {
   const { email, identifier, password } = req.body;
-  const loginId = identifier || email;
+  const loginId = (identifier || email || '').trim();
   console.log(`Login attempt for: ${loginId || 'unknown'}`);
   
   try {
@@ -70,6 +70,8 @@ const authUser = async (req, res) => {
 
     const isEmail = loginId.includes('@');
     console.log(`Searching for user with ${isEmail ? 'email' : 'phone'}: ${loginId}`);
+    
+    // Mongoose query based on trimmed identifier
     const user = await User.findOne(isEmail ? { email: loginId } : { phone: loginId });
 
     if (user && (await user.matchPassword(password))) {

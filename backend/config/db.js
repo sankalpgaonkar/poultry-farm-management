@@ -6,25 +6,37 @@ if (!mongoUri && (process.env.NODE_ENV === 'production' || process.env.VERCEL)) 
   console.error('CRITICAL: No MongoDB URI found in environment (tried MONGO_MONGODB_URI, MONGODB_URI, MONGO_URI)');
 }
 
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) {
-    return;
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    const finalUri = mongoUri || 'mongodb://localhost:27017/poultry-farm';
+    console.log(`[DB] Init MongoDB connection to: ${finalUri.split('@').pop()}`);
+    
+    cached.promise = mongoose.connect(finalUri, {
+      connectTimeoutMS: 5000, 
+      serverSelectionTimeoutMS: 5000
+    }).then((mongooseInstance) => {
+      console.log(`MongoDB Connected: ${mongooseInstance.connection.host}`);
+      return mongooseInstance;
+    });
   }
 
   try {
-    const finalUri = mongoUri || 'mongodb://localhost:27017/poultry-farm';
-    console.log(`Connecting to MongoDB...`);
-    
-    const conn = await mongoose.connect(finalUri, {
-      connectTimeoutMS: 10000, // Slightly longer for cloud connection
-      serverSelectionTimeoutMS: 10000
-    });
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    cached.conn = await cached.promise;
+    return cached.conn;
   } catch (error) {
+    cached.promise = null;
     console.error(`MongoDB Connection Error: ${error.message}`);
-    if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-      process.exit(1);
-    }
+    // DO NOT process.exit(1) here; let the request handler return a 503 status.
     throw error;
   }
 };

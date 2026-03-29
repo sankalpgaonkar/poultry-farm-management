@@ -44,14 +44,21 @@ export default function FarmStore() {
   const [search, setSearch] = useState('');
   const [showCart, setShowCart] = useState(false);
 
-  const filteredStores = STORES.filter(store =>
-    store.name.toLowerCase().includes(search.toLowerCase()) ||
-    store.description.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredStores = useMemo(() => {
+    const lowerSearch = search.toLowerCase();
+    return STORES.filter(store =>
+      store.name.toLowerCase().includes(lowerSearch) ||
+      store.description.toLowerCase().includes(lowerSearch)
+    );
+  }, [search]);
 
-  const displayedProducts = selectedStore
-    ? selectedStore.products.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
-    : [];
+  const displayedProducts = useMemo(() => {
+    if (!selectedStore) return [];
+    const lowerSearch = search.toLowerCase();
+    return selectedStore.products.filter(p => 
+      p.name.toLowerCase().includes(lowerSearch)
+    );
+  }, [selectedStore, search]);
 
   const addToCart = (item) => {
     setCart(prev => {

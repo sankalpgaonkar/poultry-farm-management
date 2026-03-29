@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { Package, Plus, AlertCircle, Trash2 } from 'lucide-react';
 
 export default function Inventory() {
@@ -10,9 +10,7 @@ export default function Inventory() {
 
   const fetchInventory = async () => {
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      const res = await axios.get('/api/inventory', config);
+      const res = await api.get('/inventory');
       setItems(res.data.items);
       setAlerts(res.data.alerts);
     } catch (err) {
@@ -27,9 +25,6 @@ export default function Inventory() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      
       const payload = {
         ...formData,
         quantity: Number(formData.quantity) || 0,
@@ -37,7 +32,7 @@ export default function Inventory() {
         dailyConsumptionRate: Number(formData.dailyConsumptionRate) || 0
       };
 
-      await axios.post('/api/inventory', payload, config);
+      await api.post('/inventory', payload);
       setShowModal(false);
       setFormData({ itemName: '', category: 'Feed', quantity: '', unit: 'kg', lowStockThreshold: '', dailyConsumptionRate: '' });
       fetchInventory();
@@ -49,9 +44,7 @@ export default function Inventory() {
   const deleteItem = async (id) => {
     if(!window.confirm('Delete this item?')) return;
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      await axios.delete(`/api/inventory/${id}`, config);
+      await api.delete(`/inventory/${id}`);
       fetchInventory();
     } catch (err) {
       console.error(err);

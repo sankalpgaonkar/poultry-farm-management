@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { Send, Bot, User } from 'lucide-react';
 
 export default function AIAssistant({ isFloating = false }) {
@@ -28,10 +28,7 @@ export default function AIAssistant({ isFloating = false }) {
     setIsLoading(true);
 
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      
-      const { data } = await axios.post('/api/ai/chat', { message: userMessage.text }, config);
+      const { data } = await api.post('/ai/chat', { message: userMessage.text });
       
       setMessages(prev => [...prev, { text: data.reply, sender: 'ai' }]);
     } catch (err) {

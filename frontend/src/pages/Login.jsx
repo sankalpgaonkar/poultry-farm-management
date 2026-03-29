@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/axios';
 
 export default function Login() {
   const [identifier, setIdentifier] = useState('');
@@ -11,7 +11,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/api/auth/login', { identifier, password });
+      const { data } = await api.post('/auth/login', { identifier, password });
       localStorage.setItem('userInfo', JSON.stringify(data));
       if (data.role === 'Farmer') {
         navigate('/farmer');

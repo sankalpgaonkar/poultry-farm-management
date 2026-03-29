@@ -35,11 +35,8 @@ app.use(express.json());
 
 app.use(async (req, res, next) => {
   try {
-    const mongoose = require('mongoose');
-    if (mongoose.connection.readyState !== 1) {
-      console.log(`[DB] Not connected (State: ${mongoose.connection.readyState}). Attempting connection...`);
-      await connectDB();
-    }
+    // connectDB uses a cached promise to avoid concurrent initialization in Serverless environments
+    await connectDB();
     next();
   } catch (error) {
     console.error('[DB] Middleware connection fail:', error.message);

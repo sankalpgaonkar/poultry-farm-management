@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { AlertCircle, ThermometerSun, Leaf, Activity } from 'lucide-react';
 
@@ -7,23 +6,25 @@ export default function DashboardOverview() {
   const [logs, setLogs] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [farms, setFarms] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
+        setLoading(true);
+        const [resAlerts, resFarms, resLogs] = await Promise.all([
+          api.get('/ai/alerts'),
+          api.get('/farms'),
+          api.get('/logs')
+        ]);
         
-        const resAlerts = await axios.get('/api/ai/alerts', config);
         setAlerts(resAlerts.data);
-        
-        const resFarms = await axios.get('/api/farms', config);
         setFarms(resFarms.data);
-
-        const resLogs = await axios.get('/api/logs', config);
         setLogs(resLogs.data.reverse()); // Keep chronological for charts
       } catch (err) {
         console.error('Failed to fetch dashboard data', err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
