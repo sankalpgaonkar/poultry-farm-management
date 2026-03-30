@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../utils/axios';
+import { supabase } from '../utils/supabase';
 
 export default function Signup() {
   const [name, setName] = useState('');
@@ -13,16 +14,43 @@ export default function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setError('');
     try {
-      const { data } = await api.post('/auth/register', { name, email, phone, password, role });
+      // 1. Sign up with Supabase
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+            role: role,
+            phone: phone
+          }
+        }
+      });
+
+      if (authError) throw authError;
+
+      // 2. Sync with existing MongoDB backend
+      // We send the Supabase ID as the identifier
+      const { data } = await api.post('/auth/register', { 
+        name, 
+        email, 
+        phone, 
+        password, // Still sent for backward compatibility/sync
+        role,
+        supabaseId: authData.user.id 
+      });
+
       localStorage.setItem('userInfo', JSON.stringify(data));
+      
       if (data.role === 'Farmer') {
         navigate('/farmer');
       } else {
         navigate('/buyer');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Error occurred during registration');
+      setError(err.message || err.response?.data?.message || 'Error occurred during registration');
     }
   };
 

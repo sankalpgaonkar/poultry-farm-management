@@ -6,6 +6,11 @@ const listingSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  farm: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Farm',
+    required: true
+  },
   productName: {
     type: String,
     required: true

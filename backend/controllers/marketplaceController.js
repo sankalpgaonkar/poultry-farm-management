@@ -4,7 +4,9 @@ const Order = require('../models/Order');
 // GET all active listings (for buyers)
 const getListings = async (req, res) => {
   try {
-    const listings = await Listing.find({ isAvailable: true }).populate('farmer', 'name');
+    const listings = await Listing.find({ isAvailable: true })
+      .populate('farmer', 'name')
+      .populate('farm', 'name location');
     res.json(listings);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -14,9 +16,15 @@ const getListings = async (req, res) => {
 // POST calculate new listing (Farmer only)
 const createListing = async (req, res) => {
   try {
-    const { productName, description, quantity, pricePerUnit, image } = req.body;
+    const { productName, description, quantity, pricePerUnit, image, farmId } = req.body;
+    
+    if (!farmId) {
+      return res.status(400).json({ message: 'Farm selection is required' });
+    }
+
     const listing = new Listing({
       farmer: req.user._id,
+      farm: farmId,
       productName,
       description,
       quantity,
@@ -34,7 +42,7 @@ const createListing = async (req, res) => {
 // GET farmer's listings 
 const getFarmerListings = async (req, res) => {
   try {
-    const listings = await Listing.find({ farmer: req.user._id });
+    const listings = await Listing.find({ farmer: req.user._id }).populate('farm', 'name location');
     res.json(listings);
   } catch (error) {
     res.status(500).json({ message: error.message });

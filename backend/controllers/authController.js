@@ -10,7 +10,7 @@ const generateToken = (id) => {
 const registerUser = async (req, res) => {
   console.log(`Registration attempt for: ${req.body.email || 'unknown'}`);
   try {
-    const { name, email, phone, password, role } = req.body;
+    const { name, email, phone, password, role, supabaseId } = req.body;
     
     if (!email || !password || !name || !role) {
        return res.status(400).json({ message: 'Missing required fields' });
@@ -35,6 +35,7 @@ const registerUser = async (req, res) => {
       phone: cleanedPhone,
       password,
       role,
+      supabaseId
     });
 
     if (user) {
@@ -69,10 +70,14 @@ const authUser = async (req, res) => {
     }
 
     const isEmail = loginId.includes('@');
-    console.log(`Searching for user with ${isEmail ? 'email' : 'phone'}: ${loginId}`);
-    
-    // Mongoose query based on trimmed identifier
-    const user = await User.findOne(isEmail ? { email: loginId } : { phone: loginId });
+    // Search for user by email, phone, or supabaseId
+    const user = await User.findOne({
+      $or: [
+        { email: loginId },
+        { phone: loginId },
+        { supabaseId: req.body.supabaseId }
+      ].filter(q => q.email || q.phone || q.supabaseId)
+    });
 
     if (user && (await user.matchPassword(password))) {
       console.log(`Login successful for user: ${user._id}`);

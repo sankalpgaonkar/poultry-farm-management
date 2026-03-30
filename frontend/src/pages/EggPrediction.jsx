@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
 import { BrainCircuit, AlertCircle, Lightbulb, TrendingUp } from 'lucide-react';
 
@@ -24,9 +24,6 @@ export default function EggPrediction() {
       if (formData.chickens <= 0 || formData.age <= 0) return;
       setLoading(true);
       try {
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-        
         const payload = {
           ...formData,
           chickens: Number(formData.chickens) || 0,
@@ -36,7 +33,7 @@ export default function EggPrediction() {
           humidity: Number(formData.humidity) || 0,
           lighting: Number(formData.lighting) || 0
         };
-        const { data } = await axios.post('/api/ai/predict', payload, config);
+        const { data } = await api.post('/ai/predict', payload);
         setResult(data);
       } catch (err) {
         console.error(err);

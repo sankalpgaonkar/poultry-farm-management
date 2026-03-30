@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { Target, MapPin, Landmark, FileText, CheckCircle } from 'lucide-react';
 
 export default function SmartFeatures() {
@@ -10,13 +10,10 @@ export default function SmartFeatures() {
   useEffect(() => {
     const fetchSmartData = async () => {
       try {
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-        
         const [schRes, buyRes, repRes] = await Promise.all([
-          axios.get('/api/smart/schemes', config),
-          axios.get('/api/smart/buyer-matches', config),
-          axios.get('/api/smart/daily-report', config)
+          api.get('/smart/schemes'),
+          api.get('/smart/buyer-matches'),
+          api.get('/smart/daily-report')
         ]);
         
         setSchemes(schRes.data);

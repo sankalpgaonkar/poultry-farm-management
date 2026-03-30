@@ -3,7 +3,10 @@ const CommunityPost = require('../models/CommunityPost');
 // Get all posts (for everyone)
 const getPosts = async (req, res) => {
   try {
-    const posts = await CommunityPost.find().populate('author', 'name role').sort('-createdAt');
+    const posts = await CommunityPost.find()
+      .populate('author', 'name role')
+      .populate('comments.author', 'name role')
+      .sort('-createdAt');
     res.json(posts);
   } catch (error) {
     res.status(500).json({ message: error.message });

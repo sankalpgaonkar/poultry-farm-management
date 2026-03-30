@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { Calculator, DollarSign, TrendingDown, TrendingUp } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -23,9 +23,6 @@ export default function ProfitAnalyzer() {
   const calculate = async (e) => {
     e.preventDefault();
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      
       const payload = {
         birdsCount: Number(formData.birdsCount) || 0,
         dailyFeedKg: Number(formData.dailyFeedKg) || 0,
@@ -36,7 +33,7 @@ export default function ProfitAnalyzer() {
         utilitiesCostDaily: Number(formData.utilitiesCostDaily) || 0
       };
 
-      const res = await axios.post('/api/finance/calculate', payload, config);
+      const res = await api.post('/finance/calculate', payload);
       setResult(res.data);
     } catch (err) {
       console.error(err);

@@ -1,10 +1,9 @@
-const { OpenAI } = require('openai');
+const { GoogleGenAI } = require('@google/genai');
 const Prediction = require('../models/Prediction');
 
-// Initialize OpenAI conditionally
-let openai;
-if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'dummy_key_for_now') {
-  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let ai;
+if (process.env.GEMINI_API_KEY) {
+  ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 }
 
 const predictProduction = async (req, res) => {
@@ -66,25 +65,29 @@ const chatWithAssistant = async (req, res) => {
   try {
     const { message } = req.body;
 
-    if (!openai) {
+    if (!ai) {
       // Mocked response for development without API Key
       return res.json({ 
-        reply: "I am a smart poultry assistant. Right now I am in offline simulation mode. To improve egg production, ensure temperature is below 30°C and feed quality is high."
+        reply: "I am a smart poultry assistant. Right now I am in offline simulation mode without a Gemini API Key. To improve egg production, ensure temperature is below 30°C and feed quality is high."
       });
     }
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "You are an expert poultry farm assistant. Answer farmers' questions simply and give actionable advice on breeding, diseases, feed, and management." },
-        { role: "user", content: message }
-      ],
-      max_tokens: 150
+    const systemInstruction = "You are an expert poultry farm assistant. Answer farmers' questions simply and give actionable advice on breeding, diseases, feed, and management.";
+    
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: message,
+      config: {
+        systemInstruction: systemInstruction,
+        temperature: 0.7,
+        maxOutputTokens: 250,
+      }
     });
 
-    res.json({ reply: response.choices[0].message.content });
+    res.json({ reply: response.text });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("AI Chat Error:", error);
+    res.status(500).json({ message: "Error communicating with AI Assistant" });
   }
 };
 

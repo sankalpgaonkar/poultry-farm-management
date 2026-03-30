@@ -7,19 +7,11 @@ echo "======================================"
 echo "🐔 Starting Poultry Farm System..."
 echo "======================================"
 
-# 1. Start the Backend API in the background
-echo "-> Starting Backend API on port 5000..."
-cd backend
-node server.js &
-BACKEND_PID=$!
-cd ..
-
-# 2. Start the Frontend React App in the background
-echo "-> Starting Frontend Web App on port 5173..."
-cd frontend
-npm run dev &
-FRONTEND_PID=$!
-cd ..
+# 1. Start the Backend API and Frontend App together using concurrently
+echo "-> Starting Full Stack Application (Backend & Frontend)..."
+npm run dev
+# Note: Since 'npm run dev' uses concurrently and stays in foreground, we don't need & or wait for individuals here.
+# But for the script's exit logic, 'npm run dev' handles SIGINT itself.
 
 echo "======================================"
 echo "✅ Both servers are now running!"

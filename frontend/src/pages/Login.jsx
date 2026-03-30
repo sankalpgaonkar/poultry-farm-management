@@ -1,25 +1,42 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../utils/axios';
+import { supabase } from '../utils/supabase';
 
 export default function Login() {
-  const [identifier, setIdentifier] = useState('');
+  const [identifier, setIdentifier] = useState(''); // Supabase will use this as email
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
     try {
-      const { data } = await api.post('/auth/login', { identifier, password });
+      // 1. Sign in with Supabase
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: identifier, // Adjusting if we assume email-only for now or use phone
+        password,
+      });
+
+      if (authError) throw authError;
+
+      // 2. Re-authenticate with backend for older logic compatibility 
+      const { data } = await api.post('/auth/login', { 
+        email: identifier, 
+        password,
+        supabaseId: authData.user.id 
+      });
+
       localStorage.setItem('userInfo', JSON.stringify(data));
+      
       if (data.role === 'Farmer') {
         navigate('/farmer');
       } else {
         navigate('/buyer');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password');
+      setError(err.message || err.response?.data?.message || 'Invalid email or password');
     }
   };
 

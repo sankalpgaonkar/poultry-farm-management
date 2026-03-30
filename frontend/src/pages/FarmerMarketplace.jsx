@@ -11,16 +11,23 @@ export default function FarmerMarketplace() {
   const [productName, setProductName] = useState('');
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
+  const [farms, setFarms] = useState([]);
+  const [selectedFarm, setSelectedFarm] = useState('');
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [resListings, resOrders] = await Promise.all([
+      const [resListings, resOrders, resFarms] = await Promise.all([
         api.get('/marketplace/my-listings'),
-        api.get('/marketplace/orders')
+        api.get('/marketplace/orders'),
+        api.get('/farms')
       ]);
       setListings(resListings.data);
       setOrders(resOrders.data);
+      setFarms(resFarms.data);
+      if (resFarms.data.length > 0) {
+        setSelectedFarm(resFarms.data[0]._id);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -32,34 +39,72 @@ export default function FarmerMarketplace() {
     fetchData();
   }, []);
 
-  const getProductIcon = (title) => {
+  const getProductImage = (title) => {
     const text = (title || '').toLowerCase();
     
-    // Massive smart dictionary mapping to EMOJIS
-    const iconMap = {
-      broiler: '🐔', layer: '🐓', chick: '🐥', chicks: '🐥', hen: '🐔',
-      rooster: '🐓', duck: '🦆', quail: '🐦', turkey: '🦃', bird: '🕊️', chicken: '🐔',
-      feed: '🌾', mash: '🥣', pellet: '💊', crumble: '🍪', grain: '🌾',
-      corn: '🌽', maize: '🌽', wheat: '🌾',
-      med: '🏥', medicine: '💊', vitamin: '🧪', vaccine: '💉', antibiotic: '💊',
-      powder: '🧂', spray: '🧴',
-      equip: '⚙️', drinker: '💧', feeder: '🍽️', lamp: '💡', brooder: '🔥',
-      incubator: '🌡️', tray: '🗃️', cage: '🏗️', coop: '🏠',
-      meat: '🥩', breast: '🥩', wing: '🍗', thigh: '🍗', frozen: '🧊',
-      brown: '🥚', white: '🥚', organic: '🥚', jumbo: '🥚', egg: '🥚', eggs: '🥚'
+    const imageMap = {
+      broiler: 'https://images.unsplash.com/photo-1548550023-2bf3b4e4eea5?q=80&w=800&auto=format&fit=crop',
+      layer: 'https://images.unsplash.com/photo-1548550023-2bf3b4e4eea5?q=80&w=800&auto=format&fit=crop',
+      hen: 'https://images.unsplash.com/photo-1548550023-2bf3b4e4eea5?q=80&w=800&auto=format&fit=crop',
+      rooster: 'https://images.unsplash.com/photo-1548550023-2bf3b4e4eea5?q=80&w=800&auto=format&fit=crop',
+      chicken: 'https://images.unsplash.com/photo-1548550023-2bf3b4e4eea5?q=80&w=800&auto=format&fit=crop',
+      bird: 'https://images.unsplash.com/photo-1548550023-2bf3b4e4eea5?q=80&w=800&auto=format&fit=crop',
+      chick: 'https://images.unsplash.com/photo-1522856339183-5a9b7367cefc?q=80&w=800&auto=format&fit=crop',
+      chicks: 'https://images.unsplash.com/photo-1522856339183-5a9b7367cefc?q=80&w=800&auto=format&fit=crop',
+      duck: 'https://images.unsplash.com/photo-1456926631375-92c8ce872def?q=80&w=800&auto=format&fit=crop',
+      turkey: 'https://images.unsplash.com/photo-1605333166669-0268da87c8cb?q=80&w=800&auto=format&fit=crop',
+      quail: 'https://images.unsplash.com/photo-1548550023-2bf3b4e4eea5?q=80&w=800&auto=format&fit=crop',
+      feed: 'https://images.unsplash.com/photo-1586208035324-747f15dbbc4b?q=80&w=800&auto=format&fit=crop',
+      mash: 'https://images.unsplash.com/photo-1586208035324-747f15dbbc4b?q=80&w=800&auto=format&fit=crop',
+      pellet: 'https://images.unsplash.com/photo-1586208035324-747f15dbbc4b?q=80&w=800&auto=format&fit=crop',
+      crumble: 'https://images.unsplash.com/photo-1586208035324-747f15dbbc4b?q=80&w=800&auto=format&fit=crop',
+      grain: 'https://images.unsplash.com/photo-1586208035324-747f15dbbc4b?q=80&w=800&auto=format&fit=crop',
+      corn: 'https://images.unsplash.com/photo-1586208035324-747f15dbbc4b?q=80&w=800&auto=format&fit=crop',
+      maize: 'https://images.unsplash.com/photo-1586208035324-747f15dbbc4b?q=80&w=800&auto=format&fit=crop',
+      wheat: 'https://images.unsplash.com/photo-1586208035324-747f15dbbc4b?q=80&w=800&auto=format&fit=crop',
+      med: 'https://images.unsplash.com/photo-1584308666744-24d5e4b78bb7?q=80&w=800&auto=format&fit=crop',
+      medicine: 'https://images.unsplash.com/photo-1584308666744-24d5e4b78bb7?q=80&w=800&auto=format&fit=crop',
+      vitamin: 'https://images.unsplash.com/photo-1584308666744-24d5e4b78bb7?q=80&w=800&auto=format&fit=crop',
+      vaccine: 'https://images.unsplash.com/photo-1584308666744-24d5e4b78bb7?q=80&w=800&auto=format&fit=crop',
+      antibiotic: 'https://images.unsplash.com/photo-1584308666744-24d5e4b78bb7?q=80&w=800&auto=format&fit=crop',
+      powder: 'https://images.unsplash.com/photo-1584308666744-24d5e4b78bb7?q=80&w=800&auto=format&fit=crop',
+      spray: 'https://images.unsplash.com/photo-1584308666744-24d5e4b78bb7?q=80&w=800&auto=format&fit=crop',
+      equip: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop',
+      drinker: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop',
+      feeder: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop',
+      lamp: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop',
+      brooder: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop',
+      incubator: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop',
+      tray: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop',
+      cage: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop',
+      coop: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop',
+      meat: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=800&auto=format&fit=crop',
+      breast: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=800&auto=format&fit=crop',
+      wing: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=800&auto=format&fit=crop',
+      thigh: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=800&auto=format&fit=crop',
+      frozen: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=800&auto=format&fit=crop',
+      brown: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?q=80&w=800&auto=format&fit=crop',
+      white: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?q=80&w=800&auto=format&fit=crop',
+      organic: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?q=80&w=800&auto=format&fit=crop',
+      jumbo: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?q=80&w=800&auto=format&fit=crop',
+      egg: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?q=80&w=800&auto=format&fit=crop',
+      eggs: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?q=80&w=800&auto=format&fit=crop'
     };
 
     const words = text.split(/[^a-z]+/);
     for (const word of words) {
-      if (iconMap[word]) return iconMap[word];
+      if (imageMap[word]) return imageMap[word];
     }
     
-    for (const [key, icon] of Object.entries(iconMap)) {
-      if (text.includes(key)) return icon;
+    for (const [key, imgUrl] of Object.entries(imageMap)) {
+      if (text.includes(key)) return imgUrl;
     }
 
-    // Stable fallback emoji based on hash
-    const fallbacks = ['📦', '🏷️', '🛒', '🛍️', '🥚'];
+    const fallbacks = [
+      'https://images.unsplash.com/photo-1516467508483-a7212febe31a?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1595856461973-19cbbf904fdb?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1529313780224-1a12b682208ea?q=80&w=800&auto=format&fit=crop'
+    ];
     let hash = 0;
     for (let i = 0; i < text.length; i++) { hash = text.charCodeAt(i) + ((hash << 5) - hash); }
     return fallbacks[Math.abs(hash) % fallbacks.length];
@@ -74,7 +119,8 @@ export default function FarmerMarketplace() {
       await axios.post('/api/marketplace', {
         productName,
         quantity: Number(quantity),
-        pricePerUnit: Number(price)
+        pricePerUnit: Number(price),
+        farmId: selectedFarm
       }, config);
       
       setShowModal(false);
@@ -128,13 +174,16 @@ export default function FarmerMarketplace() {
         <div className="grid gap-4 md:grid-cols-3">
           {listings.map(l => (
             <div key={l._id} className="border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col group">
-              <div className="h-40 bg-brand-50 flex items-center justify-center border-b group-hover:bg-brand-100 transition-colors duration-500">
-                <div className="text-7xl group-hover:scale-110 transition-transform duration-500">
-                  {getProductIcon(l.productName)}
-                </div>
+              <div className="h-40 w-full border-b overflow-hidden relative">
+                <img 
+                  src={getProductImage(l.productName)} 
+                  alt={l.productName}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
               </div>
               <div className="p-4 flex-1 flex flex-col bg-white relative z-10">
                 <h3 className="font-bold text-lg">{l.productName}</h3>
+                {l.farm && <p className="text-xs text-brand-600 font-medium">{l.farm.name}</p>}
                 <div className="mt-4 flex justify-between text-sm text-gray-600 items-end">
                   <div className="space-y-1">
                     <span className="flex items-center gap-1"><Package size={16}/> {l.quantity} units</span>
@@ -188,21 +237,35 @@ export default function FarmerMarketplace() {
           <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
             <h2 className="text-xl font-bold mb-4 text-gray-900">Create Listing</h2>
             <form onSubmit={handleCreateListing} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                <input required type="text" className="w-full border px-3 py-2 rounded-lg focus:ring-2 outline-none focus:ring-brand-500" placeholder="e.g. Organic Free-Range Eggs" value={productName} onChange={e => setProductName(e.target.value)} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Quantity (Trays/Units)</label>
-                <input required type="number" className="w-full border px-3 py-2 rounded-lg" value={quantity} onChange={e => setQuantity(e.target.value)} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Price per Unit (₹)</label>
-                <input required type="number" step="0.01" className="w-full border px-3 py-2 rounded-lg" value={price} onChange={e => setPrice(e.target.value)} />
-              </div>
+              {farms.length === 0 ? (
+                <div className="bg-yellow-50 text-yellow-800 p-4 rounded-lg text-sm border border-yellow-200">
+                  You need to create a farm in Farm Management before you can list products.
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Select Farm</label>
+                    <select required className="w-full border px-3 py-2 rounded-lg" value={selectedFarm} onChange={e => setSelectedFarm(e.target.value)}>
+                      {farms.map(f => <option key={f._id} value={f._id}>{f.name} ({f.location})</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                    <input required type="text" className="w-full border px-3 py-2 rounded-lg focus:ring-2 outline-none focus:ring-brand-500" placeholder="e.g. Organic Free-Range Eggs" value={productName} onChange={e => setProductName(e.target.value)} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Quantity (Trays/Units)</label>
+                    <input required type="number" className="w-full border px-3 py-2 rounded-lg" value={quantity} onChange={e => setQuantity(e.target.value)} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Price per Unit (₹)</label>
+                    <input required type="number" step="0.01" className="w-full border px-3 py-2 rounded-lg" value={price} onChange={e => setPrice(e.target.value)} />
+                  </div>
+                </>
+              )}
               <div className="flex justify-end gap-3 mt-6">
                 <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700">Publish Listing</button>
+                <button type="submit" disabled={farms.length === 0} className="px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 disabled:opacity-50">Publish Listing</button>
               </div>
             </form>
           </div>

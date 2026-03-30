@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['Farmer', 'Buyer'],
     required: true
+  },
+  supabaseId: {
+    type: String,
+    unique: true,
+    sparse: true
   }
 }, { timestamps: true });
 

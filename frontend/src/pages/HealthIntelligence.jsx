@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { Stethoscope, AlertTriangle, ShieldCheck, Bug } from 'lucide-react';
 
 export default function HealthIntelligence() {
@@ -19,10 +19,7 @@ export default function HealthIntelligence() {
       // split comma-separated symptoms
       const symptomsArray = symptomsInput.split(',').map(s => s.trim()).filter(Boolean);
       
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      
-      const res = await axios.post('/api/health/analyze', { symptoms: symptomsArray }, config);
+      const res = await api.post('/health/analyze', { symptoms: symptomsArray });
       setResults(res.data);
     } catch (err) {
       console.error(err);
