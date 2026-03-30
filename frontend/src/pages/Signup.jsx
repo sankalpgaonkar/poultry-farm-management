@@ -10,11 +10,14 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Farmer');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError('');
+    
     try {
       // 1. Sign up with Supabase
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -31,13 +34,19 @@ export default function Signup() {
 
       if (authError) throw authError;
 
+      // Handle case where email confirmation is required
+      if (authData.user && !authData.session) {
+        setError('Please check your email to confirm registration before logging in.');
+        setLoading(false);
+        return;
+      }
+
       // 2. Sync with existing MongoDB backend
-      // We send the Supabase ID as the identifier
       const { data } = await api.post('/auth/register', { 
         name, 
         email, 
         phone, 
-        password, // Still sent for backward compatibility/sync
+        password, 
         role,
         supabaseId: authData.user.id 
       });
@@ -50,7 +59,12 @@ export default function Signup() {
         navigate('/buyer');
       }
     } catch (err) {
-      setError(err.message || err.response?.data?.message || 'Error occurred during registration');
+      console.error('Registration full error:', err);
+      setError(err.message || 
+               err.response?.data?.message || 
+               'Error occurred during registration. Check console for details.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,9 +130,10 @@ export default function Signup() {
           </div>
           <button
             type="submit"
-            className="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors mt-2"
+            disabled={loading}
+            className="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors mt-2 disabled:opacity-50"
           >
-            Create Account
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
         <p className="mt-4 text-center text-sm text-gray-600">
