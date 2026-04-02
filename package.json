@@ -6,7 +6,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@google/genai": "^1.47.0",
+    "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.100.1",
     "@tailwindcss/vite": "^4.0.0",
     "@vitejs/plugin-react": "^4.3.4",

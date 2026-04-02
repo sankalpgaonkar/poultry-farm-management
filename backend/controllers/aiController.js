@@ -1,9 +1,9 @@
-const { GoogleGenAI } = require('@google/genai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Prediction = require('../models/Prediction');
 
-let ai;
+let genAI;
 if (process.env.GEMINI_API_KEY) {
-  ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 }
 
 const predictProduction = async (req, res) => {
@@ -65,7 +65,7 @@ const chatWithAssistant = async (req, res) => {
   try {
     const { message } = req.body;
 
-    if (!ai) {
+    if (!genAI) {
       // Mocked response for development without API Key
       return res.json({ 
         reply: "I am a smart poultry assistant. Right now I am in offline simulation mode without a Gemini API Key. To improve egg production, ensure temperature is below 30°C and feed quality is high."
@@ -74,17 +74,20 @@ const chatWithAssistant = async (req, res) => {
 
     const systemInstruction = "You are an expert poultry farm assistant. Answer farmers' questions simply and give actionable advice on breeding, diseases, feed, and management.";
     
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: message,
-      config: {
-        systemInstruction: systemInstruction,
-        temperature: 0.7,
-        maxOutputTokens: 250,
-      }
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction: systemInstruction,
     });
 
-    res.json({ reply: response.text });
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: message }] }],
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 250,
+      },
+    });
+
+    res.json({ reply: result.response.text() });
   } catch (error) {
     console.error("AI Chat Error:", error);
     res.status(500).json({ message: "Error communicating with AI Assistant" });
