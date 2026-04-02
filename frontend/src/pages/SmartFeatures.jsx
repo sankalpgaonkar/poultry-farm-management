@@ -31,7 +31,7 @@ export default function SmartFeatures() {
       
       {/* Daily AI Report */}
       <section>
-        <h2 className="text-xl font-bold flex items-center gap-2 mb-4 text-gray-800">
+        <h2 className="text-2xl font-bold flex items-center gap-2 mb-5 text-gray-800">
           <FileText className="text-blue-500" /> AI Daily Farm Report
         </h2>
         {report ? (
@@ -61,7 +61,7 @@ export default function SmartFeatures() {
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Logistics & Buyer Matching */}
         <section>
-          <h2 className="text-xl font-bold flex items-center gap-2 mb-4 text-gray-800">
+          <h2 className="text-2xl font-bold flex items-center gap-2 mb-5 text-gray-800">
             <Target className="text-orange-500" /> Buyer & Logistics Match
           </h2>
           <div className="bg-white rounded-xl shadow-sm border p-5 space-y-4">
@@ -88,7 +88,7 @@ export default function SmartFeatures() {
 
         {/* Government Schemes */}
         <section>
-          <h2 className="text-xl font-bold flex items-center gap-2 mb-4 text-gray-800">
+          <h2 className="text-2xl font-bold flex items-center gap-2 mb-5 text-gray-800">
             <Landmark className="text-emerald-500" /> Government Schemes
           </h2>
           <div className="bg-white rounded-xl shadow-sm border p-5 space-y-4">

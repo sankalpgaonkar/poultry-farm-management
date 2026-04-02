@@ -68,7 +68,7 @@ export default function Community() {
             <Users size={28} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Farmer Community Q&A</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Farmer Community Q&A</h1>
             <p className="text-sm text-gray-500">Ask questions, share advice, and help local farmers.</p>
           </div>
         </div>
@@ -104,8 +104,8 @@ export default function Community() {
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-gray-900 mb-1">{post.title}</h3>
                 <p className="text-sm text-gray-600 mb-3 whitespace-pre-line leading-relaxed">{post.content}</p>
-                <div className="flex items-center gap-4 text-xs font-semibold text-gray-500">
-                  <span className="bg-purple-50 text-purple-700 px-2 py-1 rounded text-[10px] uppercase tracking-wider">{post.author ? post.author.name : 'Unknown User'}</span>
+                <div className="flex items-center gap-4 text-sm font-semibold text-gray-500">
+                  <span className="bg-purple-50 text-purple-700 px-2 py-1 rounded text-xs uppercase tracking-wider">{post.author ? post.author.name : 'Unknown User'}</span>
                   <span>•</span>
                   <button onClick={() => toggleComments(post._id)} className="flex items-center gap-1 hover:text-purple-600 transition-colors">
                     <MessageCircle size={14}/> {post.comments?.length || 0} Comments
@@ -121,14 +121,14 @@ export default function Community() {
                   {post.comments?.map((comment, idx) => (
                     <div key={idx} className="bg-gray-50 p-3 rounded-lg border border-gray-100">
                       <div className="flex justify-between items-start mb-1">
-                        <span className="text-[10px] font-bold text-purple-600 uppercase tracking-tight">{comment.author?.name || 'Anonymous'}</span>
-                        <span className="text-[9px] text-gray-400">{new Date(comment.createdAt || Date.now()).toLocaleDateString()}</span>
+                        <span className="text-xs font-bold text-purple-600 uppercase tracking-tight">{comment.author?.name || 'Anonymous'}</span>
+                        <span className="text-xs text-gray-400">{new Date(comment.createdAt || Date.now()).toLocaleDateString()}</span>
                       </div>
-                      <p className="text-xs text-gray-700 leading-normal">{comment.content}</p>
+                      <p className="text-sm text-gray-700 leading-normal mt-1">{comment.content}</p>
                     </div>
                   ))}
                   {(!post.comments || post.comments.length === 0) && (
-                    <p className="text-xs text-gray-400 italic">No comments yet. Start the conversation!</p>
+                    <p className="text-sm text-gray-400 italic">No comments yet. Start the conversation!</p>
                   )}
                 </div>
 
@@ -138,7 +138,7 @@ export default function Community() {
                     placeholder="Write a comment..." 
                     value={commentText[post._id] || ''} 
                     onChange={e => setCommentText(prev => ({...prev, [post._id]: e.target.value}))}
-                    className="flex-1 border text-xs p-2 rounded-lg bg-gray-50 focus:ring-1 focus:ring-purple-400 outline-none resize-none"
+                    className="flex-1 border text-sm p-2.5 rounded-lg bg-gray-50 focus:ring-1 focus:ring-purple-400 outline-none resize-none"
                     rows="1"
                   />
                   <button 

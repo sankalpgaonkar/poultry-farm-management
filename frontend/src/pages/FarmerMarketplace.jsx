@@ -159,7 +159,7 @@ export default function FarmerMarketplace() {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">My Listings</h1>
+        <h1 className="text-3xl font-bold text-gray-900">My Listings</h1>
         <button 
           onClick={() => setShowModal(true)}
           className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
@@ -205,7 +205,7 @@ export default function FarmerMarketplace() {
 
       <hr className="my-8" />
       
-      <h1 className="text-2xl font-bold text-gray-900">Incoming Orders</h1>
+      <h1 className="text-3xl font-bold text-gray-900">Incoming Orders</h1>
       {orders.length === 0 ? (
         <p className="text-gray-500">No orders received yet.</p>
       ) : (

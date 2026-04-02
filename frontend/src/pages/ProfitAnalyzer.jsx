@@ -57,7 +57,7 @@ export default function ProfitAnalyzer() {
           <Calculator size={28} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Profit & Cost Analyzer</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Profit & Cost Analyzer</h1>
           <p className="text-sm text-gray-500">Calculate exact ROI, break-even points, and view profit optimizations.</p>
         </div>
       </div>
@@ -70,32 +70,32 @@ export default function ProfitAnalyzer() {
           <form onSubmit={calculate} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-gray-600">Total Birds</label>
-                <input type="number" name="birdsCount" value={formData.birdsCount} onChange={handleChange} className="w-full border rounded p-2 focus:ring-green-500 outline-none" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Total Birds</label>
+                <input type="number" name="birdsCount" value={formData.birdsCount} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base focus:ring-2 focus:ring-green-500 outline-none" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-600">Daily Egg Prod.</label>
-                <input type="number" name="dailyEggProduction" value={formData.dailyEggProduction} onChange={handleChange} className="w-full border rounded p-2 focus:ring-green-500 outline-none" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Daily Egg Prod.</label>
+                <input type="number" name="dailyEggProduction" value={formData.dailyEggProduction} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base focus:ring-2 focus:ring-green-500 outline-none" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-600">Daily Feed (kg)</label>
-                <input type="number" step="0.1" name="dailyFeedKg" value={formData.dailyFeedKg} onChange={handleChange} className="w-full border rounded p-2 focus:ring-green-500 outline-none" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Daily Feed (kg)</label>
+                <input type="number" step="0.1" name="dailyFeedKg" value={formData.dailyFeedKg} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base focus:ring-2 focus:ring-green-500 outline-none" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-600">Feed Cost (₹/kg)</label>
-                <input type="number" step="0.01" name="feedCostPerKg" value={formData.feedCostPerKg} onChange={handleChange} className="w-full border rounded p-2 focus:ring-green-500 outline-none" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Feed Cost (₹/kg)</label>
+                <input type="number" step="0.01" name="feedCostPerKg" value={formData.feedCostPerKg} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base focus:ring-2 focus:ring-green-500 outline-none" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-600">Egg Sale Price (₹/egg)</label>
-                <input type="number" step="0.01" name="eggSalePrice" value={formData.eggSalePrice} onChange={handleChange} className="w-full border rounded p-2 focus:ring-green-500 outline-none" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Egg Sale Price (₹/egg)</label>
+                <input type="number" step="0.01" name="eggSalePrice" value={formData.eggSalePrice} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base focus:ring-2 focus:ring-green-500 outline-none" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-600">Labor (₹/day)</label>
-                <input type="number" step="0.1" name="laborCostDaily" value={formData.laborCostDaily} onChange={handleChange} className="w-full border rounded p-2 focus:ring-green-500 outline-none" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Labor (₹/day)</label>
+                <input type="number" step="0.1" name="laborCostDaily" value={formData.laborCostDaily} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base focus:ring-2 focus:ring-green-500 outline-none" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-600">Utilities (₹/day)</label>
-                <input type="number" step="0.1" name="utilitiesCostDaily" value={formData.utilitiesCostDaily} onChange={handleChange} className="w-full border rounded p-2 focus:ring-green-500 outline-none" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Utilities (₹/day)</label>
+                <input type="number" step="0.1" name="utilitiesCostDaily" value={formData.utilitiesCostDaily} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base focus:ring-2 focus:ring-green-500 outline-none" />
               </div>
             </div>
             <button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mt-4 transition-colors">Calculate Finances</button>

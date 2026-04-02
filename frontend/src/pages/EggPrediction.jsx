@@ -67,7 +67,7 @@ export default function EggPrediction() {
           <BrainCircuit size={24} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Advanced AI Egg Prediction</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Advanced AI Egg Prediction</h1>
           <p className="text-sm text-gray-500">Simulate parameters to foresee production output instantly.</p>
         </div>
       </div>
@@ -79,40 +79,40 @@ export default function EggPrediction() {
           <h2 className="font-bold text-lg border-b pb-2">Simulation Parameters</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">Number of Chickens</label>
-              <input type="number" name="chickens" value={formData.chickens} onChange={handleChange} className="w-full border rounded p-2 text-sm bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Number of Chickens</label>
+              <input type="number" name="chickens" value={formData.chickens} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">Avg Age (Weeks)</label>
-              <input type="number" name="age" value={formData.age} onChange={handleChange} className="w-full border rounded p-2 text-sm bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Avg Age (Weeks)</label>
+              <input type="number" name="age" value={formData.age} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">Daily Feed Qty (kg)</label>
-              <input type="number" name="feedQty" value={formData.feedQty} onChange={handleChange} className="w-full border rounded p-2 text-sm bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Daily Feed Qty (kg)</label>
+              <input type="number" name="feedQty" value={formData.feedQty} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">Feed Quality</label>
-              <select name="feedQuality" value={formData.feedQuality} onChange={handleChange} className="w-full border rounded p-2 text-sm bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none">
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Feed Quality</label>
+              <select name="feedQuality" value={formData.feedQuality} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none">
                 <option value="Poor">Poor</option>
                 <option value="Average">Average</option>
                 <option value="Good">Good</option>
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">Temperature (°C)</label>
-              <input type="number" name="temperature" value={formData.temperature} onChange={handleChange} className="w-full border rounded p-2 text-sm bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Temperature (°C)</label>
+              <input type="number" name="temperature" value={formData.temperature} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">Humidity (%)</label>
-              <input type="number" name="humidity" value={formData.humidity} onChange={handleChange} className="w-full border rounded p-2 text-sm bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Humidity (%)</label>
+              <input type="number" name="humidity" value={formData.humidity} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">Lighting (Hours/Day)</label>
-              <input type="number" name="lighting" value={formData.lighting} onChange={handleChange} className="w-full border rounded p-2 text-sm bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Lighting (Hours/Day)</label>
+              <input type="number" name="lighting" value={formData.lighting} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1">Breed Type</label>
-              <input type="text" name="breed" value={formData.breed} onChange={handleChange} className="w-full border rounded p-2 text-sm bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Breed Type</label>
+              <input type="text" name="breed" value={formData.breed} onChange={handleChange} className="w-full border rounded px-3 py-2.5 text-base bg-gray-50 focus:ring-2 focus:ring-brand-500 outline-none" />
             </div>
           </div>
           {loading && <p className="text-xs text-brand-600 animate-pulse font-medium">Running simulation...</p>}

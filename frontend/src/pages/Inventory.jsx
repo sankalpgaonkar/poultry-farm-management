@@ -59,7 +59,7 @@ export default function Inventory() {
             <Package size={28} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Inventory Management</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Inventory Management</h1>
             <p className="text-sm text-gray-500">Track feed, medicine, and predict depletion.</p>
           </div>
         </div>
@@ -122,13 +122,13 @@ export default function Inventory() {
             <h2 className="text-xl font-bold mb-4">Add Inventory Item</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Item Name</label>
-                <input required type="text" value={formData.itemName} onChange={e=>setFormData({...formData, itemName: e.target.value})} className="w-full border p-2 rounded outline-none focus:ring-2 focus:ring-indigo-500" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Item Name</label>
+                <input required type="text" value={formData.itemName} onChange={e=>setFormData({...formData, itemName: e.target.value})} className="w-full border px-3 py-2.5 rounded text-base outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Category</label>
-                  <select value={formData.category} onChange={e=>setFormData({...formData, category: e.target.value})} className="w-full border p-2 rounded outline-none focus:ring-2 focus:ring-indigo-500">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Category</label>
+                  <select value={formData.category} onChange={e=>setFormData({...formData, category: e.target.value})} className="w-full border px-3 py-2.5 rounded text-base outline-none focus:ring-2 focus:ring-indigo-500">
                     <option value="Feed">Feed</option>
                     <option value="Medicine">Medicine</option>
                     <option value="Equipment">Equipment</option>
@@ -136,20 +136,20 @@ export default function Inventory() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Unit (kg, L, etc)</label>
-                  <input required type="text" value={formData.unit} onChange={e=>setFormData({...formData, unit: e.target.value})} className="w-full border p-2 rounded outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit (kg, L, etc)</label>
+                  <input required type="text" value={formData.unit} onChange={e=>setFormData({...formData, unit: e.target.value})} className="w-full border px-3 py-2.5 rounded text-base outline-none focus:ring-2 focus:ring-indigo-500" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Quantity</label>
-                  <input required type="number" value={formData.quantity} onChange={e=>setFormData({...formData, quantity: e.target.value})} className="w-full border p-2 rounded outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Quantity</label>
+                  <input required type="number" value={formData.quantity} onChange={e=>setFormData({...formData, quantity: e.target.value})} className="w-full border px-3 py-2.5 rounded text-base outline-none focus:ring-2 focus:ring-indigo-500" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Low Stock Thresh.</label>
-                  <input required type="number" value={formData.lowStockThreshold} onChange={e=>setFormData({...formData, lowStockThreshold: e.target.value})} className="w-full border p-2 rounded outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Low Stock Thresh.</label>
+                  <input required type="number" value={formData.lowStockThreshold} onChange={e=>setFormData({...formData, lowStockThreshold: e.target.value})} className="w-full border px-3 py-2.5 rounded text-base outline-none focus:ring-2 focus:ring-indigo-500" />
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-sm font-medium mb-1">Daily Consumption Rate</label>
-                  <input type="number" step="0.1" value={formData.dailyConsumptionRate} onChange={e=>setFormData({...formData, dailyConsumptionRate: e.target.value})} className="w-full border p-2 rounded outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Daily Consumption Rate</label>
+                  <input type="number" step="0.1" value={formData.dailyConsumptionRate} onChange={e=>setFormData({...formData, dailyConsumptionRate: e.target.value})} className="w-full border px-3 py-2.5 rounded text-base outline-none focus:ring-2 focus:ring-indigo-500" />
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-4">
