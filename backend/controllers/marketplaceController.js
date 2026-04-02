@@ -1,5 +1,6 @@
 const Listing = require('../models/Listing');
 const Order = require('../models/Order');
+const mongoose = require('mongoose');
 
 // GET all active listings (for buyers)
 const getListings = async (req, res) => {
@@ -54,6 +55,10 @@ const placeOrder = async (req, res) => {
   try {
     const { listingId, quantityOrdered } = req.body;
     
+    if (!mongoose.Types.ObjectId.isValid(listingId)) {
+      return res.status(404).json({ message: 'Listing not found' });
+    }
+
     const listing = await Listing.findById(listingId);
     if (!listing) return res.status(404).json({ message: 'Listing not found' });
     if (listing.quantity < quantityOrdered) return res.status(400).json({ message: 'Not enough quantity available' });

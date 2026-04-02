@@ -1,5 +1,6 @@
 const EggProductionLog = require('../models/EggProductionLog');
 const Farm = require('../models/Farm');
+const mongoose = require('mongoose');
 
 const getLogs = async (req, res) => {
   try {
@@ -20,6 +21,10 @@ const createLog = async (req, res) => {
   try {
     const { farmId, date, totalEggs, temperature, humidity, feedConsumed, mortalityCount, currentChickenCount } = req.body;
     
+    if (!mongoose.Types.ObjectId.isValid(farmId)) {
+      return res.status(400).json({ message: 'Invalid farm ID' });
+    }
+
     // Check if farm belongs to farmer
     const farm = await Farm.findById(farmId);
     if (!farm || farm.farmer.toString() !== req.user._id.toString()) {
