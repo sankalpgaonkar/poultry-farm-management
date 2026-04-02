@@ -91,6 +91,7 @@ app.get('/api/health', (req, res) => {
       hasMongoUri: !!(process.env.MONGO_URI || process.env.MONGO_MONGODB_URI),
       hasJwtSecret: !!process.env.JWT_SECRET,
       hasOpenAiKey: !!process.env.OPENAI_API_KEY,
+      hasGeminiKey: !!process.env.GEMINI_API_KEY,
       usingFallbackUri: !process.env.MONGO_URI && !!process.env.MONGO_MONGODB_URI
     }
   });
