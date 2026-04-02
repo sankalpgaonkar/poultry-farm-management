@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import api from '../utils/axios';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { AlertCircle, ThermometerSun, Leaf, Activity } from 'lucide-react';
