@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ShoppingCart, Plus, Minus, Tag, Truck, Store as StoreIcon, Search, ChevronLeft } from 'lucide-react';
 
 const STORES = [
@@ -6,34 +6,34 @@ const STORES = [
     id: 1,
     name: 'National Agro Supplies',
     description: 'Top quality feed and daily farm essentials.',
-    image: 'https://s3.amazonaws.com/grazecart/jlgreenfarm/images/1650400101_625f1b658f648.jpg',
+    image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=800&auto=format&fit=crop',
     products: [
-      { id: 101, name: 'Premium Layer Mash (50kg)', category: 'Feed', price: 1500, icon: '🌾', description: 'High protein formula for maximum egg production.' },
-      { id: 102, name: 'Broiler Starter Crumbles', category: 'Feed', price: 1800, icon: '🌽', description: 'Optimal nutrition for rapid early growth.' },
-      { id: 103, name: 'Wood Shavings Bale (20kg)', category: 'Supplies', price: 150, icon: '🌲', description: 'Clean bedding material.' }
+      { id: 101, name: 'Premium Layer Mash (50kg)', category: 'Feed', price: 1500, icon: '🌾', image: 'https://images.unsplash.com/photo-1586208035324-747f15dbbc4b?q=80&w=800&auto=format&fit=crop', description: 'High protein formula for maximum egg production.' },
+      { id: 102, name: 'Broiler Starter Crumbles', category: 'Feed', price: 1800, icon: '🌽', image: 'https://images.unsplash.com/photo-1601593768929-d5e47a37ef2a?q=80&w=800&auto=format&fit=crop', description: 'Optimal nutrition for rapid early growth.' },
+      { id: 103, name: 'Wood Shavings Bale (20kg)', category: 'Supplies', price: 150, icon: '🌲', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop', description: 'Clean bedding material.' }
     ]
   },
   {
     id: 2,
     name: 'PoultryMed Pharma',
     description: 'Veterinary medicines and supplements.',
-    image: 'https://farmstores.com/wp-content/uploads/agile-store-locator/Logo/2407-photo-copy-62ec2457751ea.jpeg',
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5e4b78bb7?q=80&w=800&auto=format&fit=crop',
     products: [
-      { id: 201, name: 'Amoxicillin Powder 500g', category: 'Medicine', price: 600, icon: '💊', description: 'Broad-spectrum antibiotic.' },
-      { id: 202, name: 'Liquid Multivitamins 1L', category: 'Medicine', price: 450, icon: '🧪', description: 'Immune booster.' },
-      { id: 203, name: 'Disinfectant Spray 5L', category: 'Supplies', price: 850, icon: '🧼', description: 'Heavy-duty biosecurity spray.' }
+      { id: 201, name: 'Amoxicillin Powder 500g', category: 'Medicine', price: 600, icon: '💊', image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?q=80&w=800&auto=format&fit=crop', description: 'Broad-spectrum antibiotic.' },
+      { id: 202, name: 'Liquid Multivitamins 1L', category: 'Medicine', price: 450, icon: '🧪', image: 'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?q=80&w=800&auto=format&fit=crop', description: 'Immune booster.' },
+      { id: 203, name: 'Disinfectant Spray 5L', category: 'Supplies', price: 850, icon: '🧼', image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?q=80&w=800&auto=format&fit=crop', description: 'Heavy-duty biosecurity spray.' }
     ]
   },
   {
     id: 3,
     name: 'Sunrise Hatcheries',
     description: 'Day-old chicks and heavy equipment.',
-    image: 'https://chehalisfarmstore.com/wp-content/uploads/2023/06/The-Farm-Store-sq.jpg',
+    image: 'https://images.unsplash.com/photo-1522856339183-5a9b7367cefc?q=80&w=800&auto=format&fit=crop',
     products: [
-      { id: 301, name: 'White Leghorn Chicks (x100)', category: 'Chicks', price: 3500, icon: '🐥', description: 'Day-old layer chicks.' },
-      { id: 302, name: 'Cobb 500 Broilers (x100)', category: 'Chicks', price: 3200, icon: '🐔', description: 'Fast-growing meat birds.' },
-      { id: 303, name: 'Automatic Bell Drinker', category: 'Equipment', price: 250, icon: '💧', description: 'Gravity-fed watering system.' },
-      { id: 304, name: 'Infrared Brooder Lamp', category: 'Equipment', price: 450, icon: '💡', description: '250W heating lamp.' }
+      { id: 301, name: 'White Leghorn Chicks (x100)', category: 'Chicks', price: 3500, icon: '🐥', image: 'https://images.unsplash.com/photo-1555629151-5738dff4ebb7?q=80&w=800&auto=format&fit=crop', description: 'Day-old layer chicks.' },
+      { id: 302, name: 'Cobb 500 Broilers (x100)', category: 'Chicks', price: 3200, icon: '🐔', image: 'https://images.unsplash.com/photo-1548550023-2bf3b4e4eea5?q=80&w=800&auto=format&fit=crop', description: 'Fast-growing meat birds.' },
+      { id: 303, name: 'Automatic Bell Drinker', category: 'Equipment', price: 250, icon: '💧', image: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=800&auto=format&fit=crop', description: 'Gravity-fed watering system.' },
+      { id: 304, name: 'Infrared Brooder Lamp', category: 'Equipment', price: 450, icon: '💡', image: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?q=80&w=800&auto=format&fit=crop', description: '250W heating lamp.' }
     ]
   }
 ];
@@ -167,16 +167,21 @@ export default function FarmStore() {
         ) : (
           // Render Products
           displayedProducts.map(item => (
-            <div key={item.id} className="bg-white border rounded-2xl p-5 hover:shadow-xl transition-all flex flex-col relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-brand-50 text-brand-700 font-bold px-3 py-1 rounded-bl-xl text-xs flex items-center gap-1">
+            <div key={item.id} className="bg-white border rounded-2xl overflow-hidden hover:shadow-xl transition-all flex flex-col relative">
+              <div className="absolute top-0 right-0 bg-brand-50 text-brand-700 font-bold px-3 py-1 rounded-bl-xl text-xs flex items-center gap-1 z-10">
                 <Tag size={12} /> {item.category}
               </div>
 
-              <div className="text-6xl text-center py-6">
-                {item.icon}
+              <div className="h-40 overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  onError={(e) => { e.target.onerror = null; e.target.src = `https://via.placeholder.com/400x300?text=${encodeURIComponent(item.name)}`; }}
+                />
               </div>
 
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col p-5">
                 <h3 className="font-bold text-gray-900 leading-tight mb-1">{item.name}</h3>
                 <p className="text-xs text-gray-500 flex-1">{item.description}</p>
 
