@@ -119,7 +119,7 @@ export default function BuyerMarketplace() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Marketplace</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Marketplace</h1>
           <p className="text-gray-500 text-sm mt-1">Directly purchase fresh eggs from local farmers.</p>
         </div>
         <input 

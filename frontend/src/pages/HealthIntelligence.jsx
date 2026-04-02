@@ -39,7 +39,7 @@ export default function HealthIntelligence() {
           <Stethoscope size={28} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Health Intelligence & Diagnostics</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Health Intelligence & Diagnostics</h1>
           <p className="text-sm text-gray-500">Early disease detection and treatment recommendations.</p>
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function HealthIntelligence() {
                 <button 
                   key={s} 
                   onClick={() => addSymptom(s)}
-                  className="bg-gray-100 hover:bg-red-50 hover:text-red-700 text-gray-600 px-3 py-1 rounded-full text-xs font-medium transition-colors"
+                  className="bg-gray-100 hover:bg-red-50 hover:text-red-700 text-gray-600 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
                 >
                   + {s}
                 </button>

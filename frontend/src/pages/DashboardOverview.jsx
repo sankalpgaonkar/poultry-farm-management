@@ -40,18 +40,18 @@ export default function DashboardOverview() {
   }));
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
       
       {/* Top Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
         {[
           { label: 'Total Chickens', value: totalChickens, icon: Activity },
           { label: 'Today\'s Eggs', value: todaysEggs, icon: Leaf },
           { label: 'Active Farms', value: farms.length, icon: ThermometerSun },
           { label: 'Pending Alerts', value: alerts.length, icon: AlertCircle, color: 'text-orange-600' },
         ].map((stat, i) => (
-          <div key={i} className="p-4 border rounded-xl bg-gray-50 flex items-center gap-4">
+          <div key={i} className="p-5 border rounded-xl bg-gray-50 flex items-center gap-4">
             <div className={`p-3 bg-white rounded-lg shadow-sm ${stat.color || 'text-brand-600'}`}>
               <stat.icon size={24} />
             </div>

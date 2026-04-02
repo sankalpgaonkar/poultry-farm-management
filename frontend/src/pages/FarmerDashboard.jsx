@@ -45,7 +45,7 @@ export default function FarmerDashboard() {
       
       {/* Sidebar Navigation */}
       <aside className="w-full md:w-64 bg-white rounded-xl shadow-sm p-4 md:h-[calc(100vh-8rem)] md:sticky top-24 overflow-y-auto">
-        <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 px-3">Farmer Menu</h2>
+        <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 px-3">Farmer Menu</h2>
         <nav className="space-y-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path || (item.path !== '/farmer' && location.pathname.startsWith(item.path));
@@ -53,7 +53,7 @@ export default function FarmerDashboard() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                className={`flex items-center gap-3 px-3 py-3 rounded-lg font-medium text-base transition-colors ${
                   isActive ? 'bg-brand-50 text-brand-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
@@ -66,7 +66,7 @@ export default function FarmerDashboard() {
       </aside>
       
       {/* Main Execution Area */}
-      <main className="flex-1 bg-white rounded-xl shadow-sm p-4 md:p-6 md:overflow-y-auto md:min-h-[calc(100vh-8rem)] relative">
+      <main className="flex-1 bg-white rounded-xl shadow-sm p-5 md:p-8 md:overflow-y-auto md:min-h-[calc(100vh-8rem)] relative">
         <Routes>
           <Route path="/" element={<DashboardOverview />} />
           <Route path="/health" element={<HealthIntelligence />} />

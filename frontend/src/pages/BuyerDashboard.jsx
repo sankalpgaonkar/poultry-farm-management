@@ -15,7 +15,7 @@ export default function BuyerDashboard() {
   return (
     <div className="flex h-full gap-6">
       <aside className="w-64 bg-white rounded-xl shadow-sm p-4 h-[calc(100vh-8rem)] sticky top-24">
-        <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 px-3">Buyer Menu</h2>
+        <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 px-3">Buyer Menu</h2>
         <nav className="space-y-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path || (item.path !== '/buyer' && location.pathname.startsWith(item.path));
@@ -23,7 +23,7 @@ export default function BuyerDashboard() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                className={`flex items-center gap-3 px-3 py-3 rounded-lg font-medium text-base transition-colors ${
                   isActive ? 'bg-brand-50 text-brand-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
@@ -35,7 +35,7 @@ export default function BuyerDashboard() {
         </nav>
       </aside>
       
-      <main className="flex-1 bg-white rounded-xl shadow-sm p-6 overflow-y-auto min-h-[calc(100vh-8rem)]">
+      <main className="flex-1 bg-white rounded-xl shadow-sm p-8 overflow-y-auto min-h-[calc(100vh-8rem)]">
         <Routes>
           <Route path="/" element={<BuyerMarketplace />} />
           <Route path="/orders" element={<div className="text-center py-10"><h2 className="text-xl font-bold">My Orders</h2><p className="text-gray-500 mt-2">All your previous orders will appear here (coming soon).</p></div>} />

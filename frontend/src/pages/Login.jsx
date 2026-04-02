@@ -43,14 +43,14 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-[80vh]">
       <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
         {error && <div className="bg-red-100 text-red-600 p-3 rounded mb-4 text-sm">{error}</div>}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email or Phone</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email or Phone</label>
             <input
               type="text"
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+              className="w-full px-4 py-3 border rounded-lg text-base focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
               placeholder="Enter your email or phone number"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
@@ -58,10 +58,10 @@ export default function Login() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
             <input
               type="password"
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+              className="w-full px-4 py-3 border rounded-lg text-base focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -70,7 +70,7 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            className="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 px-4 rounded-lg text-base transition-colors"
           >
             Sign In
           </button>

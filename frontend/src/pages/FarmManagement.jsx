@@ -67,9 +67,9 @@ export default function FarmManagement() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">My Farms</h1>
+        <h1 className="text-3xl font-bold text-gray-900">My Farms</h1>
         <button 
           onClick={() => setShowFarmModal(true)}
           className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
@@ -124,16 +124,16 @@ export default function FarmManagement() {
             <h2 className="text-xl font-bold mb-4 text-gray-900">Add New Farm</h2>
             <form onSubmit={handleCreateFarm} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Farm Name</label>
-                <input required type="text" className="w-full border px-3 py-2 rounded-lg" value={farmName} onChange={e => setFarmName(e.target.value)} />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Farm Name</label>
+                <input required type="text" className="w-full border px-3 py-3 rounded-lg text-base" value={farmName} onChange={e => setFarmName(e.target.value)} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                <input required type="text" className="w-full border px-3 py-2 rounded-lg" value={location} onChange={e => setLocation(e.target.value)} />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Location</label>
+                <input required type="text" className="w-full border px-3 py-3 rounded-lg text-base" value={location} onChange={e => setLocation(e.target.value)} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Number of Chickens</label>
-                <input required type="number" className="w-full border px-3 py-2 rounded-lg" value={chickens} onChange={e => setChickens(e.target.value)} />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Number of Chickens</label>
+                <input required type="number" className="w-full border px-3 py-3 rounded-lg text-base" value={chickens} onChange={e => setChickens(e.target.value)} />
               </div>
               <div className="flex justify-end gap-3 mt-6">
                 <button type="button" onClick={() => setShowFarmModal(false)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
@@ -152,21 +152,21 @@ export default function FarmManagement() {
             <form onSubmit={handleAddLog} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Total Chickens</label>
-                  <input required type="number" className="w-full border px-3 py-2 rounded-lg bg-brand-50 font-semibold" value={currentChickens} onChange={e => setCurrentChickens(e.target.value)} />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Total Chickens</label>
+                  <input required type="number" className="w-full border px-3 py-3 rounded-lg bg-brand-50 font-semibold text-base" value={currentChickens} onChange={e => setCurrentChickens(e.target.value)} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Total Eggs Collected</label>
-                  <input required type="number" className="w-full border px-3 py-2 rounded-lg" value={eggs} onChange={e => setEggs(e.target.value)} />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Total Eggs Collected</label>
+                  <input required type="number" className="w-full border px-3 py-3 rounded-lg text-base" value={eggs} onChange={e => setEggs(e.target.value)} />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Avg Temperature (°C)</label>
-                <input required type="number" step="0.1" className="w-full border px-3 py-2 rounded-lg" value={temperature} onChange={e => setTemperature(e.target.value)} />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Avg Temperature (°C)</label>
+                <input required type="number" step="0.1" className="w-full border px-3 py-3 rounded-lg text-base" value={temperature} onChange={e => setTemperature(e.target.value)} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Feed Consumed (kg)</label>
-                <input required type="number" className="w-full border px-3 py-2 rounded-lg" value={feed} onChange={e => setFeed(e.target.value)} />
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Feed Consumed (kg)</label>
+                <input required type="number" className="w-full border px-3 py-3 rounded-lg text-base" value={feed} onChange={e => setFeed(e.target.value)} />
               </div>
               <div className="flex justify-end gap-3 mt-6">
                 <button type="button" onClick={() => setShowLogModal(false)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
