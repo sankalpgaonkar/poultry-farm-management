@@ -13,7 +13,7 @@ export const supabase = supabaseUrl && supabaseAnonKey
   : {
       auth: {
         getSession: async () => ({ data: { session: null }, error: null }),
-        onAuthStateChange: (_event, _cb) => ({ data: { subscription: { unsubscribe: () => {} } } }),
+        onAuthStateChange: (_callback) => ({ data: { subscription: { unsubscribe: () => {} } } }),
         signInWithPassword: async () => ({ data: null, error: new Error('Supabase is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.') }),
         signUp: async () => ({ data: null, error: new Error('Supabase is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.') }),
         signOut: async () => ({ error: null }),
