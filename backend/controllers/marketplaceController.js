@@ -98,7 +98,18 @@ const updateOrderStatus = async (req, res) => {
     if (!order) return res.status(404).json({ message: 'Order not found' });
     if (order.farmer.toString() !== req.user._id.toString()) return res.status(403).json({ message: 'Not authorized' });
 
-    order.status = req.body.status || order.status;
+    const previousStatus = order.status;
+    const newStatus = req.body.status || order.status;
+
+    // Restore listing quantity when a pending order is rejected
+    if (previousStatus === 'Pending' && newStatus === 'Rejected') {
+      await Listing.findByIdAndUpdate(order.listing, {
+        $inc: { quantity: order.quantityOrdered },
+        isAvailable: true
+      });
+    }
+
+    order.status = newStatus;
     const updatedOrder = await order.save();
     res.json(updatedOrder);
   } catch (error) {
