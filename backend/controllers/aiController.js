@@ -1,11 +1,6 @@
 const { GoogleGenAI } = require('@google/genai');
 const Prediction = require('../models/Prediction');
 
-let ai;
-if (process.env.GEMINI_API_KEY) {
-  ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-}
-
 const predictProduction = async (req, res) => {
   try {
     const { chickens = 0, age = 0, feedQuality = 'Average', feedQty = 0, temperature = 25, humidity = 60, lighting = 12, breed = 'Unknown' } = req.body;
@@ -65,12 +60,14 @@ const chatWithAssistant = async (req, res) => {
   try {
     const { message } = req.body;
 
-    if (!ai) {
+    if (!process.env.GEMINI_API_KEY) {
       // Mocked response for development without API Key
       return res.json({ 
         reply: "I am a smart poultry assistant. Right now I am in offline simulation mode without a Gemini API Key. To improve egg production, ensure temperature is below 30°C and feed quality is high."
       });
     }
+
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     const systemInstruction = "You are an expert poultry farm assistant. Answer farmers' questions simply and give actionable advice on breeding, diseases, feed, and management.";
     
