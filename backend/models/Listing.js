@@ -27,6 +27,11 @@ const listingSchema = new mongoose.Schema({
   },
   image: {
     type: String
+  },
+  category: {
+    type: String,
+    enum: ['EGG', 'BIRD', 'FEED', 'EQUIPMENT', 'OTHER'],
+    default: 'EGG'
   }
 }, { timestamps: true });
 

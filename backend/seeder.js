@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const Farm = require('./models/Farm');
 const Listing = require('./models/Listing');
@@ -18,13 +18,10 @@ const importData = async () => {
     await Listing.deleteMany();
     await EggProductionLog.deleteMany();
 
-    // 1. Create Users
-    const salt = await bcrypt.genSalt(10);
-    const hash1 = await bcrypt.hash('password123', salt);
-    
-    const createdUsers = await User.insertMany([
-      { name: 'John Doe (Farmer)', email: 'farmer1@test.com', password: hash1, role: 'Farmer' },
-      { name: 'Alice Smith (Buyer)', email: 'buyer1@test.com', password: hash1, role: 'Buyer' }
+    // 1. Create Users (User.create triggers the pre-save password hashing hook)
+    const createdUsers = await User.create([
+      { name: 'John Doe (Farmer)', email: 'farmer1@test.com', password: 'password123', role: 'Farmer' },
+      { name: 'Alice Smith (Buyer)', email: 'buyer1@test.com', password: 'password123', role: 'Buyer' }
     ]);
     const farmerId = createdUsers[0]._id;
 
@@ -51,6 +48,7 @@ const importData = async () => {
         totalEggs: eggs,
         temperature: temp,
         humidity: 60 + Math.random()*20,
+        currentChickenCount: 500,
         feedConsumed: 120 + Math.random()*10,
         mortalityCount: Math.random() > 0.8 ? 1 : 0
       });

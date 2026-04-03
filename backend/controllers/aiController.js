@@ -1,22 +1,41 @@
-const { OpenAI } = require('openai');
 const Prediction = require('../models/Prediction');
+const Inventory = require('../models/Inventory');
 
-// Initialize OpenAI conditionally
-let openai;
-if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'dummy_key_for_now') {
-  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-}
+let aiClient;
+let aiModel;
+
+// Initialize GoogleGenAI
+const initGenAI = async () => {
+  if (!aiClient && process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'dummy_key_for_now') {
+    try {
+      const { GoogleGenAI } = await import("@google/genai");
+      aiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      aiModel = "gemini-1.5-flash"; // Stable free tier. Use "gemini-3-flash-preview" if enabled.
+    } catch (err) {
+      console.error("Failed to initialize @google/genai:", err);
+    }
+  }
+};
+initGenAI();
 
 const predictProduction = async (req, res) => {
   try {
     const { chickens = 0, age = 0, feedQuality = 'Average', feedQty = 0, temperature = 25, humidity = 60, lighting = 12, breed = 'Unknown' } = req.body;
     
-    // Surrogate ML Model Logic (Linear Regression styling)
-    let idealProduction = chickens * 0.95; // Theoretical max: 95% laying rate
+    // breed-specific laying rates (ideal maximums)
+    let layingRate = 0.90; // Default (Leghorn style)
+    const b = (breed || '').toUpperCase();
+    if (b.includes('DESI') || b.includes('COUNTRY')) layingRate = 0.55;
+    else if (b.includes('KADAKNATH')) layingRate = 0.35;
+    else if (b.includes('VANARAJA')) layingRate = 0.75;
+    else if (b.includes('RIR') || b.includes('RED')) layingRate = 0.85;
+
+    let idealProduction = chickens * layingRate; 
     
     let ageFactor = 1.0;
-    if (age < 20) ageFactor = 0.3 + (age/20)*0.6;
-    else if (age > 70) ageFactor = Math.max(0.4, 0.9 - ((age-70)*0.015));
+    if (age < 18) ageFactor = 0; // Not laying yet
+    else if (age < 24) ageFactor = (age - 18) / 6; // Ramp up
+    else if (age > 72) ageFactor = Math.max(0.3, 0.9 - ((age - 72) * 0.02));
     
     let tempFactor = 1.0;
     if (temperature > 30) tempFactor = Math.max(0.5, 1.0 - (temperature - 30) * 0.05);
@@ -28,7 +47,6 @@ const predictProduction = async (req, res) => {
     
     let feedQtyPerBird = chickens > 0 ? (feedQty / chickens) : 0;
     let feedQtyFactor = feedQtyPerBird >= 0.11 ? 1.0 : Math.max(0.4, feedQtyPerBird / 0.11);
-
     let overallEfficiency = Math.max(0, ageFactor * tempFactor * lightingFactor * feedQualityFactor * feedQtyFactor);
     let predictedEggs = Math.floor(idealProduction * overallEfficiency);
     
@@ -64,36 +82,129 @@ const predictProduction = async (req, res) => {
 
 const chatWithAssistant = async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, history = [] } = req.body;
 
-    if (!openai) {
-      // Mocked response for development without API Key
+    await initGenAI();
+
+    if (!aiClient) {
       return res.json({ 
-        reply: "I am a smart poultry assistant. Right now I am in offline simulation mode. To improve egg production, ensure temperature is below 30°C and feed quality is high."
+        reply: "Hello! I am Kisan Mitra, your smart poultry assistant. Currently, I am in **Smart Simulation Mode**. To enable live AI with real-time intelligence, please add your **GEMINI_API_KEY** to the system configuration. In the meantime, I can still provide expert-curated advice on farm efficiency and health based on pre-defined high-yield protocols."
       });
     }
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "You are an expert poultry farm assistant. Answer farmers' questions simply and give actionable advice on breeding, diseases, feed, and management." },
-        { role: "user", content: message }
-      ],
-      max_tokens: 150
+    const systemInstruction = `You are **Kisan Mitra**, an elite Smart Farming AI Advisor. 
+    **Your Goals:**
+    1. Provide expert-level agricultural advice covering poultry, livestock, crops, farm economics, and government schemes.
+    2. Be professional, direct, and actionable. 
+    3. Use Markdown (headers, bold, bullet points) for clarity.
+    
+    **Smart Suggestions Rule:**
+    At the VERY END of every response, you MUST provide 3-4 short, specific follow-up questions or actions for the user. 
+    Format each suggestion exactly like this: [[Suggest: Your Suggestion Here]]
+    Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
+
+    // Map history for Gemini (user/model)
+    // In this newer SDK, we can pass systemInstruction either in model init or prepended
+    const contents = [
+      { role: 'user', parts: [{ text: systemInstruction }] },
+      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
+      ...history.map(h => ({
+        role: h.role === 'user' ? 'user' : 'model',
+        parts: [{ text: h.content }]
+      })),
+      { role: 'user', parts: [{ text: message }] }
+    ];
+
+    const result = await aiClient.models.generateContent({
+      model: aiModel,
+      contents: contents
     });
 
-    res.json({ reply: response.choices[0].message.content });
+    res.json({ reply: result.text || "I am processing your request. Please try again." });
+  } catch (error) {
+    console.error('GenAI Error:', error);
+    res.status(500).json({ message: "Kisan Mitra is experiencing high demand. Please try again in a moment.", error: error.message });
+  }
+};
+
+const processPhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No photo uploaded' });
+    }
+
+    if (!aiModel) {
+      return res.status(503).json({ message: 'AI vision is currenty disabled. Please set your GEMINI_API_KEY.' });
+    }
+
+    const prompt = `Extract feeding or inventory data from this poultry farm image.
+    Identify: 
+    1. Type of item (e.g. Broiler Starter, Layer Mash, Medicine name)
+    2. Approximate quantity/weight (if visible on bag or log)
+    3. Unit (kg, bags, liters)
+    
+    Return ONLY a JSON object: { "itemName": string, "quantity": number, "unit": string, "category": "Feed" | "Medicine" | "Other" }`;
+
+    const imageParts = [{
+      inlineData: {
+        data: req.file.buffer.toString("base64"),
+        mimeType: req.file.mimetype
+      }
+    }];
+
+    await initGenAI();
+    const result = await aiClient.models.generateContent({
+      model: aiModel,
+      contents: [{ role: 'user', parts: [{ text: prompt }, ...imageParts] }]
+    });
+    
+    const text = result.text || "";
+    
+    // Clean JSON from response
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    const data = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+
+    if (!data) throw new Error('Could not parse structured data from image.');
+    
+    res.json(data);
+  } catch (error) {
+    console.error('Photo AI Error:', error);
+    res.status(500).json({ message: "Kisan Mitra could not read the photo. Please ensure it is clear and shows readable labels.", error: error.message });
+  }
+};
+
+const getSmartAlerts = async (req, res) => {
+  try {
+    const lowStock = await Inventory.find({ 
+      farmer: req.user._id,
+      $expr: { $lte: ["$quantity", "$lowStockThreshold"] }
+    });
+
+    const predictions = await Inventory.find({ 
+      farmer: req.user._id,
+      dailyConsumptionRate: { $gt: 0 }
+    });
+
+    const alerts = [];
+    lowStock.forEach(item => {
+      alerts.push(`Low stock warning: **${item.itemName}** (${item.quantity} ${item.unit} remaining). Suggest restock.`);
+    });
+
+    predictions.forEach(item => {
+      const daysLeft = Math.floor(item.quantity / item.dailyConsumptionRate);
+      if (daysLeft <= 3 && daysLeft > 0) {
+        alerts.push(`Critical depletion: **${item.itemName}** will run out in ~${daysLeft} days.`);
+      }
+    });
+
+    if (alerts.length === 0) {
+      alerts.push("All stocks are stable. No immediate action required.");
+    }
+
+    res.json({ alerts });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const getSmartAlerts = async (req, res) => {
-  // Mock smart alerts based on typical triggers
-  res.json([
-    { type: 'Temperature', message: 'Temperature in Farm A is above 35°C. High risk of heat stress!', severity: 'High' },
-    { type: 'Feed', message: 'Feed stock is running low based on current consumption rates.', severity: 'Medium' }
-  ]);
-};
-
-module.exports = { predictProduction, chatWithAssistant, getSmartAlerts };
+module.exports = { predictProduction, chatWithAssistant, getSmartAlerts, processPhoto };

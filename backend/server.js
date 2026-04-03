@@ -61,6 +61,7 @@ const financeRoutes = require('./routes/financeRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const communityRoutes = require('./routes/communityRoutes');
 const smartRoutes = require('./routes/smartRoutes');
+const supplyRoutes = require('./routes/supplyRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/farms', farmRoutes);
@@ -72,6 +73,7 @@ app.use('/api/finance', financeRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api/smart', smartRoutes);
+app.use('/api/supplies', supplyRoutes);
 
 app.get('/api/test', (req, res) => {
   res.json({ 

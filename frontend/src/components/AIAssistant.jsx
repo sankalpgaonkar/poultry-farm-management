@@ -1,0 +1,337 @@
+import { useState, useEffect, useRef } from 'react';
+import { 
+  MessageCircle, 
+  X, 
+  Send, 
+  Bot, 
+  User, 
+  Loader2, 
+  Sparkles, 
+  Minus, 
+  Maximize2, 
+  Camera, 
+  Image as ImageIcon,
+  Zap,
+  BrainCircuit,
+  Activity,
+  ArrowRight,
+  TrendingUp,
+  Cpu
+} from 'lucide-react';
+import api from '../utils/axios';
+
+export default function AIAssistant({ isStatic = false }) {
+  const [isOpen, setIsOpen] = useState(isStatic);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [message, setMessage] = useState('');
+  const [chat, setChat] = useState([
+    { role: 'bot', content: 'Hello! I am **Kisan Mitra**, your farm helper. I can help you track your birds, check egg production, and find the best market prices. How can I help you today?' }
+  ]);
+  const [loading, setLoading] = useState(false);
+  const [photoLoading, setPhotoLoading] = useState(false);
+  const [pendingInventory, setPendingInventory] = useState(null);
+  const chatEndRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chat]);
+
+  const handleSend = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const query = typeof e === 'string' ? e : message;
+    if (!query.trim()) return;
+
+    const history = chat
+      .filter(m => m.role === 'user' || m.role === 'bot')
+      .slice(-10)
+      .map(m => ({
+        role: m.role === 'bot' ? 'model' : 'user',
+        content: m.content
+      }));
+
+    const userMessage = { role: 'user', content: query };
+    setChat(prev => [...prev, userMessage]);
+    setMessage('');
+    setLoading(true);
+
+    try {
+      const { data } = await api.post('/ai/chat', { message: query, history });
+      setChat(prev => [...prev, { role: 'bot', content: data.reply }]);
+    } catch (err) {
+      setChat(prev => [...prev, { role: 'bot', content: 'Connecting issues. Please try again in a moment.' }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setPhotoLoading(true);
+    setChat(prev => [...prev, { role: 'user', content: '📸 Checking photo...' }]);
+
+    const formData = new FormData();
+    formData.append('photo', file);
+
+    try {
+      const { data } = await api.post('/ai/process-photo', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
+      setPendingInventory(data);
+      setChat(prev => [...prev, { 
+        role: 'bot', 
+        type: 'inventory_confirm',
+        data: data,
+        content: `Photo checked! I found: **${data.itemName}** (${data.quantity} ${data.unit}). Shall I add this to your stock?` 
+      }]);
+    } catch (err) {
+      setChat(prev => [...prev, { role: 'bot', content: 'Could not read the photo. Please take a clearer picture and try again.' }]);
+    } finally {
+      setPhotoLoading(false);
+    }
+  };
+
+  const handleConfirmInventory = async () => {
+    if (!pendingInventory) return;
+    
+    setLoading(true);
+    try {
+      await api.post('/inventory/bulk', { items: [pendingInventory] });
+      setChat(prev => [...prev.filter(m => m.type !== 'inventory_confirm'), { 
+        role: 'bot', 
+        content: `✅ Added! **${pendingInventory.itemName}** is now in your stock.` 
+      }]);
+      setPendingInventory(null);
+    } catch (err) {
+      setChat(prev => [...prev, { role: 'bot', content: 'Could not save. Please try again.' }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const extractSuggestions = (text) => {
+    const regex = /\[\[Suggest:\s*(.*?)\]\]/g;
+    const suggestions = [];
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      suggestions.push(match[1]);
+    }
+    return suggestions;
+  };
+
+  const removeSuggestions = (text) => {
+    return text.replace(/\[\[Suggest:\s*.*?\]\]/g, '').trim();
+  };
+
+  const renderContent = (content) => {
+    if (!content) return null;
+    const cleanContent = removeSuggestions(content);
+    
+    return cleanContent.split('\n').map((line, i) => {
+      const parts = line.split('**');
+      const formattedLine = parts.map((part, j) => 
+        j % 2 === 1 ? <strong key={j} className="text-emerald-600 font-bold">{part}</strong> : part
+      );
+
+      if (line.trim().startsWith('* ') || line.trim().startsWith('- ')) {
+        return <li key={i} className="ml-4 list-disc mb-1 text-slate-700 font-medium font-sans">{formattedLine.map(f => f)}</li>;
+      }
+      return <p key={i} className={line.trim() === '' ? 'h-2' : 'mb-2 text-slate-700 leading-relaxed font-medium font-sans'}>{formattedLine}</p>;
+    });
+  };
+
+  const quickActions = [
+    "Check Market Prices",
+    "Bird Health Tips",
+    "Egg Prediction",
+    "Daily Farm Report"
+  ];
+
+  const containerClasses = isStatic 
+    ? "w-full h-[calc(100vh-14rem)] flex flex-col bg-white rounded-[3rem] shadow-3xl border border-slate-100 overflow-hidden"
+    : `fixed bottom-8 right-8 z-[100] w-[95%] md:w-[450px] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${isMinimized ? 'h-24 translate-y-2' : 'h-[750px]'} flex flex-col bg-white rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-20 fade-in duration-700 scale-100`;
+
+  if (!isOpen && !isStatic) {
+    return (
+      <button
+        onClick={() => setIsOpen(true)}
+        className="fixed bottom-10 right-10 z-[100] bg-slate-900 hover:bg-emerald-600 text-white w-20 h-20 rounded-[2rem] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.2)] transition-all duration-500 hover:scale-110 active:scale-95 group flex items-center justify-center border border-slate-800"
+      >
+        <div className="absolute inset-0 bg-emerald-500 rounded-full blur-[40px] opacity-20 group-hover:opacity-40 animate-pulse" />
+        <BrainCircuit size={32} className="relative z-10 transition-transform group-hover:rotate-12" />
+      </button>
+    );
+  }
+
+  return (
+    <div className={containerClasses}>
+      {/* Friendly Header */}
+      <div className="relative overflow-hidden bg-slate-50 p-8 flex items-center justify-between shrink-0 border-b border-slate-100">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-[40px] -mr-16 -mt-16"></div>
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-emerald-100">
+            <Bot size={24} />
+          </div>
+          <div>
+            <h3 className="text-slate-900 font-black text-sm tracking-widest uppercase italic">Kisan Mitra AI</h3>
+            <div className="flex items-center gap-2 mt-1">
+               <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />
+               <span className="text-[8px] text-emerald-600/60 font-black tracking-[0.3em] uppercase">Active & Ready</span>
+            </div>
+          </div>
+        </div>
+        {!isStatic && (
+          <div className="flex items-center gap-4 relative z-10">
+            <button onClick={() => setIsMinimized(!isMinimized)} className="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-300 transition-all">
+              {isMinimized ? <Maximize2 size={18} /> : <Minus size={18} />}
+            </button>
+            <button onClick={() => setIsOpen(false)} className="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all">
+              <X size={18} />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {(!isMinimized || isStatic) && (
+        <>
+          {/* Chat Messages */}
+          <div className="flex-grow overflow-y-auto px-8 py-10 space-y-8 bg-white scrollbar-hide">
+            {chat.map((msg, idx) => (
+              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-4 duration-500`}>
+                <div className={`max-w-[85%] relative overflow-hidden transition-all duration-500 ${
+                  msg.role === 'user' 
+                  ? 'bg-slate-900 text-white rounded-[2rem] rounded-tr-none px-6 py-4 shadow-xl shadow-slate-200 font-bold text-xs uppercase tracking-wider' 
+                  : 'bg-slate-50 text-slate-800 border border-slate-100 rounded-[2rem] rounded-tl-none px-6 py-5 shadow-sm font-medium text-xs'
+                }`}>
+                  {msg.role === 'user' ? (
+                     <div className="flex items-center gap-3">
+                        <User size={14} className="opacity-60" />
+                        <span className="font-sans">{msg.content}</span>
+                     </div>
+                  ) : renderContent(msg.content)}
+                  
+                  {msg.role === 'bot' && extractSuggestions(msg.content).length > 0 && (
+                    <div className="mt-6 flex flex-wrap gap-2">
+                       {extractSuggestions(msg.content).map((suggestion, sIdx) => (
+                         <button
+                           key={sIdx}
+                           onClick={() => handleSend(suggestion)}
+                           className="text-[9px] bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all font-black uppercase tracking-[0.2em]"
+                         >
+                           {suggestion}
+                         </button>
+                       ))}
+                    </div>
+                  )}
+
+                  {msg.type === 'inventory_confirm' && (
+                    <div className="mt-6 p-6 bg-emerald-50 rounded-3xl border border-emerald-100 space-y-4">
+                      <div className="flex justify-between items-center text-slate-900">
+                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-600">Item Found</span>
+                        <Zap size={14} className="text-emerald-500 animate-pulse" />
+                      </div>
+                      <div className="text-slate-900 font-black text-base uppercase tracking-tighter">
+                        {msg.data.itemName} <span className="text-emerald-500">×</span> {msg.data.quantity} {msg.data.unit}
+                      </div>
+                      <button 
+                        onClick={handleConfirmInventory}
+                        className="w-full bg-emerald-600 text-white py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-emerald-500 hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-emerald-100 flex items-center justify-center gap-3"
+                      >
+                        Add to Stock <ArrowRight size={14} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+            
+            {/* Quick Actions */}
+            {chat.length < 5 && (
+              <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar pt-4">
+                {quickActions.map(action => (
+                  <button 
+                    key={action}
+                    onClick={() => handleSend(action)}
+                    className="whitespace-nowrap px-6 py-3 bg-white border border-slate-100 rounded-2xl text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] hover:border-emerald-500/50 hover:text-emerald-600 transition-all hover:-translate-y-1 shadow-sm"
+                  >
+                    {action}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {loading && (
+              <div className="flex justify-start">
+                <div className="bg-slate-50 border border-slate-100 p-6 rounded-[2rem] rounded-tl-none flex items-center gap-3">
+                  <div className="flex gap-1">
+                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-bounce h-1" />
+                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:-0.3s] h-1" />
+                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:-0.5s] h-1" />
+                  </div>
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Thinking...</span>
+                </div>
+              </div>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* User Input Area */}
+          <div className="p-8 bg-slate-50 border-t border-slate-100 shrink-0">
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              className="hidden" 
+              accept="image/*" 
+              onChange={handlePhotoUpload} 
+            />
+            <div className="relative group flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current.click()}
+                disabled={loading || photoLoading}
+                className="w-16 h-16 bg-white text-slate-400 rounded-2xl hover:bg-emerald-50 hover:text-emerald-600 transition-all border border-slate-200 flex items-center justify-center shrink-0 shadow-sm"
+                title="Send Photo"
+              >
+                {photoLoading ? <Loader2 size={24} className="animate-spin text-emerald-500" /> : <Camera size={24} />}
+              </button>
+              <div className="relative flex-grow">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                  placeholder="Ask something..."
+                  className="w-full bg-white border border-slate-200 pl-6 pr-16 py-5 rounded-2xl outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500 transition-all font-sans text-xs text-slate-900 placeholder:text-slate-400 tracking-wide shadow-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleSend()}
+                  disabled={loading || !message.trim() || photoLoading}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-slate-900 text-white rounded-xl hover:bg-emerald-600 transition-all disabled:opacity-20 flex items-center justify-center shadow-lg"
+                >
+                  <Send size={18} />
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-between items-center mt-6">
+               <p className="text-[8px] text-slate-400 font-black uppercase tracking-[0.4em]">
+                  Secure Chat Active
+               </p>
+               <div className="flex items-center gap-2">
+                  <span className="text-[8px] text-slate-400 font-black uppercase tracking-[0.2em]">Safe to use</span>
+                  <Activity size={10} className="text-emerald-500/40" />
+               </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

@@ -5,11 +5,12 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import FarmerDashboard from './pages/FarmerDashboard';
 import BuyerDashboard from './pages/BuyerDashboard';
+import AIAssistant from './components/AIAssistant';
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col relative">
         <Navbar />
         <main className="flex-grow p-4 md:p-8">
           <Routes>
@@ -20,6 +21,7 @@ function App() {
             <Route path="/buyer/*" element={<BuyerDashboard />} />
           </Routes>
         </main>
+        <AIAssistant />
       </div>
     </Router>
   );

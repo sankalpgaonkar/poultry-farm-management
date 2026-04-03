@@ -1,11 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const { protect, farmerOnly } = require('../middleware/authMiddleware');
-const { getInventory, addInventoryItem, updateInventoryItem, deleteInventoryItem } = require('../controllers/inventoryController');
+const { 
+  getInventory, 
+  addInventoryItem, 
+  updateInventoryItem, 
+  deleteInventoryItem,
+  bulkAddInventoryItems 
+} = require('../controllers/inventoryController');
 
 router.route('/')
   .get(protect, farmerOnly, getInventory)
   .post(protect, farmerOnly, addInventoryItem);
+
+router.post('/bulk', protect, farmerOnly, bulkAddInventoryItems);
 
 router.route('/:id')
   .put(protect, farmerOnly, updateInventoryItem)

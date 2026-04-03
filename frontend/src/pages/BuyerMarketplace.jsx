@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/axios';
 import { ShoppingCart } from 'lucide-react';
+import { getConsistentImage } from '../utils/imageConstants';
 
 export default function BuyerMarketplace() {
   const [listings, setListings] = useState([]);
@@ -11,48 +12,15 @@ export default function BuyerMarketplace() {
 
   const fetchListings = async () => {
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      
-      const res = await axios.get('/api/marketplace', config);
+      const res = await api.get('/marketplace');
       setListings(res.data);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const getProductIcon = (title) => {
-    const text = (title || '').toLowerCase();
-    
-    // Massive smart dictionary mapping to EMOJIS
-    const iconMap = {
-      broiler: '🐔', layer: '🐓', chick: '🐥', chicks: '🐥', hen: '🐔',
-      rooster: '🐓', duck: '🦆', quail: '🐦', turkey: '🦃', bird: '🕊️', chicken: '🐔',
-      feed: '🌾', mash: '🥣', pellet: '💊', crumble: '🍪', grain: '🌾',
-      corn: '🌽', maize: '🌽', wheat: '🌾',
-      med: '🏥', medicine: '💊', vitamin: '🧪', vaccine: '💉', antibiotic: '💊',
-      powder: '🧂', spray: '🧴',
-      equip: '⚙️', drinker: '💧', feeder: '🍽️', lamp: '💡', brooder: '🔥',
-      incubator: '🌡️', tray: '🗃️', cage: '🏗️', coop: '🏠',
-      meat: '🥩', breast: '🥩', wing: '🍗', thigh: '🍗', frozen: '🧊',
-      brown: '🥚', white: '🥚', organic: '🥚', jumbo: '🥚', egg: '🥚', eggs: '🥚'
-    };
+  const getProductImage = (title) => getConsistentImage(title);
 
-    const words = text.split(/[^a-z]+/);
-    for (const word of words) {
-      if (iconMap[word]) return iconMap[word];
-    }
-    
-    for (const [key, icon] of Object.entries(iconMap)) {
-      if (text.includes(key)) return icon;
-    }
-
-    // Stable fallback emoji based on hash
-    const fallbacks = ['📦', '🏷️', '🛒', '🛍️', '🥚'];
-    let hash = 0;
-    for (let i = 0; i < text.length; i++) { hash = text.charCodeAt(i) + ((hash << 5) - hash); }
-    return fallbacks[Math.abs(hash) % fallbacks.length];
-  };
 
   useEffect(() => {
     fetchListings();
@@ -61,13 +29,10 @@ export default function BuyerMarketplace() {
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-      
-      await axios.post('/api/marketplace/orders', {
+      await api.post('/marketplace/orders', {
         listingId: selectedListing._id,
         quantityOrdered: Number(orderQuantity) || 1
-      }, config);
+      });
       
       setShowOrderModal(false);
       setOrderQuantity('');
@@ -105,10 +70,13 @@ export default function BuyerMarketplace() {
         ) : (
           filteredListings.map(l => (
             <div key={l._id} className="border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow bg-white flex flex-col group">
-              <div className="h-48 bg-brand-50 flex items-center justify-center border-b group-hover:bg-brand-100 transition-colors duration-500">
-                <div className="text-7xl group-hover:scale-110 transition-transform duration-500">
-                  {getProductIcon(l.productName)}
-                </div>
+              <div className="h-48 overflow-hidden relative">
+                <img 
+                  src={getProductImage(l.productName)} 
+                  alt={l.productName}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => { e.target.src = 'https://via.placeholder.com/400x300?text=Product+Image'; }}
+                />
               </div>
               <div className="p-5 flex-1 flex flex-col bg-white relative z-10">
                 <div className="flex justify-between items-start mb-2">
