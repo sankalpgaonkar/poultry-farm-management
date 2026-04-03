@@ -18,6 +18,10 @@ dist/
 .env.test.local
 .env.production.local
 
+# Project specific
+sacred-union-invite/
+!poultry-farm-management/
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
