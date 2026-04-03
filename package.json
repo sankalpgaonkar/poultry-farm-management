@@ -1,0 +1,17 @@
+{
+  "name": "antigravity-monorepo",
+  "private": true,
+  "workspaces": [
+    "poultry-farm-management",
+    "sacred-union-invite"
+  ],
+  "scripts": {
+    "install-all": "npm install && npm install --prefix poultry-farm-management && npm install --prefix sacred-union-invite",
+    "dev": "npm run dev --prefix poultry-farm-management",
+    "build": "npm run build --prefix poultry-farm-management",
+    "start": "npm run start --prefix poultry-farm-management"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
