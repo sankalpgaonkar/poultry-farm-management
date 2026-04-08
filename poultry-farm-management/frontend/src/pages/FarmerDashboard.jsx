@@ -223,7 +223,7 @@ export default function FarmerDashboard() {
 
         {/* Dashboard Pages */}
         <div className="flex-1 overflow-y-auto bg-slate-50">
-           <div className="p-8 lg:p-12 xl:p-16">
+           <div className="p-6 lg:p-8 xl:p-12">
               <Routes>
                 <Route path="/" element={<DashboardOverview />} />
                 <Route path="/health" element={<HealthIntelligence />} />

@@ -107,7 +107,7 @@ export default function Inventory() {
     <div className="space-y-12 pb-20">
       
       {/* Balanced Header Layer */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-soft relative overflow-hidden">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-soft relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50/50 rounded-full translate-x-32 -translate-y-32 blur-3xl opacity-30"></div>
         
         <div className="space-y-4 relative z-10">
@@ -141,7 +141,7 @@ export default function Inventory() {
 
 
       {alerts.length > 0 && (
-        <div className="relative overflow-hidden bg-rose-50 border border-slate-100 rounded-[2.5rem] p-10 flex flex-col md:flex-row gap-8 items-center shadow-soft">
+        <div className="relative overflow-hidden bg-rose-50 border border-slate-100 rounded-[2rem] p-8 flex flex-col md:flex-row gap-8 items-center shadow-soft">
           <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-rose-500 border border-rose-100 shadow-sm shrink-0">
              <ShieldAlert size={32} className="animate-pulse" />
           </div>
@@ -191,7 +191,7 @@ export default function Inventory() {
             const daysLeft = item.dailyConsumptionRate > 0 ? Math.floor(item.quantity / item.dailyConsumptionRate) : '---';
 
             return (
-              <div key={item._id} className="group bg-white border border-slate-100 rounded-[2rem] p-8 hover:shadow-strong transition-all duration-300 flex flex-col">
+              <div key={item._id} className="group bg-white border border-slate-100 rounded-[2rem] p-6 hover:shadow-strong transition-all duration-300 flex flex-col">
                  <div className="flex justify-between items-start mb-6">
                     <div className="space-y-1">
                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.category}</span>

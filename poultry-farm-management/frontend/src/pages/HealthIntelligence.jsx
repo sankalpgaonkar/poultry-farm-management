@@ -57,7 +57,7 @@ export default function HealthIntelligence() {
   return (
     <div className="space-y-12 pb-20">
       {/* Friendly Header */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-soft relative overflow-hidden">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-soft relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-rose-50/50 rounded-full translate-x-32 -translate-y-32 blur-3xl opacity-30"></div>
         
         <div className="space-y-4 relative z-10">
@@ -169,7 +169,7 @@ export default function HealthIntelligence() {
             {results ? (
               results.length > 0 ? (
                 results.map((r, i) => (
-                  <div key={i} className="group bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-soft hover:shadow-strong transition-all overflow-hidden flex flex-col relative">
+                  <div key={i} className="group bg-white border border-slate-100 rounded-[2rem] p-8 shadow-soft hover:shadow-strong transition-all overflow-hidden flex flex-col relative">
                     <div className={`absolute top-0 left-0 w-2 h-full ${
                        r.riskLevel === 'Critical' ? 'bg-rose-600' : 
                        r.riskLevel === 'High' ? 'bg-orange-500' : 'bg-amber-400'

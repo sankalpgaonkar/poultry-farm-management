@@ -94,7 +94,7 @@ export default function FarmManagement() {
     <div className="space-y-16 pb-20">
       
       {/* Optimized Header Layer */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-soft relative overflow-hidden">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-soft relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50/50 rounded-full translate-x-32 -translate-y-32 blur-3xl"></div>
         
         <div className="space-y-4 relative z-10">
@@ -134,7 +134,7 @@ export default function FarmManagement() {
       ) : (
         <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {farms.map((farm) => (
-            <div key={farm._id} className="group relative bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:shadow-strong transition-all duration-300 overflow-hidden flex flex-col">
+            <div key={farm._id} className="group relative bg-white border border-slate-100 rounded-[2rem] p-6 hover:shadow-strong transition-all duration-300 overflow-hidden flex flex-col">
               
               <div className="flex justify-between items-start mb-8 relative z-10">
                 <div className="space-y-1.5">
@@ -188,7 +188,7 @@ export default function FarmManagement() {
       {showFarmModal && (
         <div className="fixed inset-0 z-[300] flex items-center justify-center p-6 sm:p-12">
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-3xl animate-in fade-in duration-500" onClick={() => setShowFarmModal(false)} />
-          <div className="relative bg-white rounded-[5rem] p-16 md:p-24 w-full max-w-3xl shadow-4xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-20 duration-700">
+          <div className="relative bg-white rounded-[2.5rem] p-10 md:p-12 w-full max-w-2xl shadow-4xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-20 duration-700">
             <div className="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-emerald-600 to-emerald-400" />
             
             <div className="flex justify-between items-start mb-16 relative z-10">
@@ -243,7 +243,7 @@ export default function FarmManagement() {
       {showLogModal && (
         <div className="fixed inset-0 z-[300] flex items-center justify-center p-6 sm:p-12">
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-3xl animate-in fade-in duration-500" onClick={() => setShowLogModal(false)} />
-          <div className="relative bg-white rounded-[5rem] p-16 md:p-24 w-full max-w-3xl shadow-4xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-20 duration-700">
+          <div className="relative bg-white rounded-[2.5rem] p-10 md:p-12 w-full max-w-2xl shadow-4xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-20 duration-700">
             <div className="absolute top-0 left-0 w-full h-4 bg-emerald-600" />
             
             <div className="flex justify-between items-start mb-16 relative z-10">

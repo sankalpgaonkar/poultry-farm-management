@@ -10,7 +10,7 @@ const initGenAI = async () => {
     try {
       const { GoogleGenAI } = await import("@google/genai");
       aiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-      aiModel = "gemini-1.5-flash"; // Stable free tier. Use "gemini-3-flash-preview" if enabled.
+      aiModel = "gemini-2.0-flash"; // Upgraded to the latest high-performance model
     } catch (err) {
       console.error("Failed to initialize @google/genai:", err);
     }

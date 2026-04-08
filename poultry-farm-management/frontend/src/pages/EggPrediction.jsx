@@ -81,7 +81,7 @@ export default function EggPrediction() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-12 pb-24">
       {/* Friendly Header */}
-      <div className="relative overflow-hidden bg-slate-900 rounded-[3rem] p-10 lg:p-16 text-white shadow-xl">
+      <div className="relative overflow-hidden bg-slate-900 rounded-[2.5rem] p-10 lg:p-12 text-white shadow-xl">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-emerald-500/10 to-transparent"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none"></div>
         
@@ -116,7 +116,7 @@ export default function EggPrediction() {
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
         {/* Input Details */}
         <div className="xl:col-span-5 space-y-8">
-           <div className="bg-white rounded-[2.5rem] p-10 shadow-xl border border-slate-50">
+           <div className="bg-white rounded-[2rem] p-8 shadow-xl border border-slate-50">
               <div className="flex items-center gap-4 mb-8">
                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
                     <Target size={20} />
@@ -196,7 +196,7 @@ export default function EggPrediction() {
            {result ? (
              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
                 {/* Result Card */}
-                <div className="bg-slate-900 rounded-[3rem] p-10 text-white relative overflow-hidden shadow-xl">
+                <div className="bg-slate-900 rounded-[2rem] p-8 text-white relative overflow-hidden shadow-xl">
                    <div className="absolute bottom-0 right-0 p-10 opacity-5 scale-150 rotate-12">
                       <TrendingUp size={180} />
                    </div>
@@ -241,7 +241,7 @@ export default function EggPrediction() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                    {/* performance Card */}
-                   <div className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-xl space-y-6 flex flex-col justify-between">
+                   <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-xl space-y-6 flex flex-col justify-between">
                       <div className="flex items-center justify-between">
                          <h4 className="text-lg font-black text-slate-900 uppercase tracking-tight">Performance</h4>
                          <PieChartIcon className="text-emerald-500" size={20} />
@@ -266,7 +266,7 @@ export default function EggPrediction() {
                    </div>
 
                    {/* Tips Card */}
-                   <div className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-xl space-y-6">
+                   <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-xl space-y-6">
                       <div className="flex items-center gap-4">
                          <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
                             <Lightbulb size={20} />

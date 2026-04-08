@@ -71,7 +71,7 @@ export default function Login() {
                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
                  Welcome to PoultrySmart
               </div>
-              <h1 className="text-8xl font-black text-slate-900 leading-[0.85] tracking-tight uppercase">
+              <h1 className="text-6xl lg:text-7xl font-black text-slate-900 leading-[0.85] tracking-tight uppercase">
                  Farmer <br />
                  <span className="text-emerald-600">Login.</span>
               </h1>
@@ -129,7 +129,7 @@ export default function Login() {
                   </div>
                   <input
                     type="text"
-                    className="w-full bg-white border border-slate-200 px-16 py-6 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
+                    className="w-full bg-white border border-slate-200 px-12 py-4 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
                     placeholder="Enter Mobile or Email"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
@@ -146,7 +146,7 @@ export default function Login() {
                   </div>
                   <input
                     type="password"
-                    className="w-full bg-white border border-slate-200 px-16 py-6 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
+                    className="w-full bg-white border border-slate-200 px-12 py-4 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -163,7 +163,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-20 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-[2rem] transition-all shadow-xl shadow-emerald-200 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-4 text-sm uppercase tracking-wider disabled:opacity-50"
+              className="w-full h-16 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-[2rem] transition-all shadow-xl shadow-emerald-200 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-4 text-sm uppercase tracking-wider disabled:opacity-50"
             >
               {loading ? 'Logging in...' : 'Login'} 
               {!loading && <ArrowRight size={20} />}

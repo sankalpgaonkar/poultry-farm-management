@@ -39,7 +39,6 @@ export default function Home() {
               Smart <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-300">Poultry</span> App.
             </h1>
-Suggest text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-300
             
             <p className="text-lg md:text-xl text-gray-300 font-medium leading-relaxed max-w-xl">
               Use the power of AI to predict egg production, monitor your farm in real-time, and sell directly to buyers in the market.
@@ -81,7 +80,7 @@ Suggest text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emera
       </section>
 
       {/* Smart Features */}
-      <section className="max-w-7xl mx-auto px-6 py-32 space-y-24">
+      <section className="max-w-7xl mx-auto px-6 py-24 space-y-16">
         <div className="text-center space-y-6 max-w-3xl mx-auto">
           <h2 className="text-sm font-black text-emerald-600 uppercase tracking-[0.2em]">Smart Features</h2>
           <p className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-tight">
@@ -90,7 +89,7 @@ Suggest text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emera
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             { 
               icon: Activity, 
@@ -117,7 +116,7 @@ Suggest text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emera
               color: 'bg-indigo-600'
             },
           ].map((feat, i) => (
-            <div key={i} className="group bg-white p-10 rounded-[3rem] border border-gray-100 hover:border-emerald-200 hover:shadow-2xl hover:shadow-emerald-100/50 transition-all duration-500 flex flex-col items-center text-center">
+            <div key={i} className="group bg-white p-8 rounded-[2rem] border border-gray-100 hover:border-emerald-200 hover:shadow-2xl hover:shadow-emerald-100/50 transition-all duration-500 flex flex-col items-center text-center">
               <div className={`${feat.color} w-20 h-20 rounded-[2rem] flex items-center justify-center text-white mb-8 shadow-2xl group-hover:scale-110 transition-transform`}>
                 <feat.icon size={32} />
               </div>
@@ -130,7 +129,7 @@ Suggest text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emera
 
       {/* Visual Showcase */}
       <section className="max-w-7xl mx-auto px-6 pb-32">
-        <div className="bg-slate-900 rounded-[4rem] overflow-hidden flex flex-col lg:flex-row shadow-3xl shadow-emerald-900/10">
+        <div className="bg-slate-900 rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row shadow-3xl shadow-emerald-900/10">
            <div className="lg:w-1/2 h-96 lg:h-auto overflow-hidden">
              <img src={POULTRY_IMAGES.HERO.CHICKS_GROUP} alt="Precision" className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000" />
            </div>

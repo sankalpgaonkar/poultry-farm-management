@@ -81,7 +81,7 @@ export default function ProfitAnalyzer() {
     <div className="space-y-12 pb-20">
       
       {/* Balanced Header */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-soft relative overflow-hidden">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-soft relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50/50 rounded-full translate-x-32 -translate-y-32 blur-3xl text-emerald-100 opacity-20">
            <Calculator size={200} />
         </div>
@@ -111,7 +111,7 @@ export default function ProfitAnalyzer() {
         
         {/* Input Side */}
         <div className="xl:col-span-5 space-y-8">
-           <div className="bg-white border border-slate-100 rounded-[3rem] p-10 md:p-12 shadow-soft relative overflow-hidden">
+           <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-soft relative overflow-hidden">
               <div className="flex justify-between items-center mb-10 relative z-10">
                  <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                     Today's Numbers <Target size={20} className="text-emerald-500" />
@@ -221,7 +221,7 @@ export default function ProfitAnalyzer() {
             {result ? (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-500">
                  {/* Success/Warning Card */}
-                 <div className={`relative overflow-hidden rounded-[2.5rem] p-10 text-white shadow-lg ${result.breakdown.dailyProfit >= 0 ? 'bg-emerald-600' : 'bg-rose-600'}`}>
+                 <div className={`relative overflow-hidden rounded-[2rem] p-8 text-white shadow-lg ${result.breakdown.dailyProfit >= 0 ? 'bg-emerald-600' : 'bg-rose-600'}`}>
                     <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
                        {result.breakdown.dailyProfit >= 0 ? <TrendingUp size={120} /> : <TrendingDown size={120} />}
                     </div>
@@ -252,7 +252,7 @@ export default function ProfitAnalyzer() {
 
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Cost Chart */}
-                    <div className="bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-xl space-y-8 group">
+                    <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-xl space-y-8 group">
                        <div className="flex items-center justify-between">
                           <div className="space-y-1">
                              <h4 className="text-xl font-black text-slate-900 uppercase tracking-tight">Where is your money going?</h4>
@@ -299,7 +299,7 @@ export default function ProfitAnalyzer() {
                     </div>
 
                     <div className="space-y-8">
-                       <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white border border-slate-800 shadow-xl group">
+                       <div className="bg-slate-900 rounded-[2rem] p-8 text-white border border-slate-800 shadow-xl group">
                           <div className="flex items-center gap-5 mb-8">
                              <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-emerald-400">
                                 <BarChart3 size={24} />
@@ -324,7 +324,7 @@ export default function ProfitAnalyzer() {
                        </div>
 
                        {result.suggestions.length > 0 && (
-                          <div className="bg-white border border-slate-100 p-10 rounded-[2.5rem] shadow-xl space-y-6 relative overflow-hidden group">
+                          <div className="bg-white border border-slate-100 p-8 rounded-[2rem] shadow-xl space-y-6 relative overflow-hidden group">
                              <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
                                    <Zap size={20} className="animate-bounce" />

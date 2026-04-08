@@ -91,7 +91,7 @@ export default function Community() {
         
         {/* Navigation & Controls - Sidebar Left */}
         <div className="xl:col-span-3 space-y-8">
-           <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-xl shadow-slate-100/50 space-y-8">
+           <div className="bg-white border border-slate-100 rounded-[2rem] p-6 shadow-xl shadow-slate-100/50 space-y-8">
               <div className="space-y-4">
                  <label className="text-sm font-black uppercase text-slate-400 tracking-wider italic px-2">Search Posts</label>
                  <div className="relative">
@@ -112,7 +112,7 @@ export default function Community() {
               </div>
            </div>
 
-           <div className="bg-purple-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden group">
+           <div className="bg-purple-900 rounded-[2rem] p-6 text-white relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl translate-x-10 -translate-y-10 group-hover:bg-white/20 transition-colors"></div>
               <Activity size={32} className="text-purple-300 mb-6" />
               <h4 className="text-lg font-black uppercase tracking-tight leading-none mb-2">Active Area</h4>
@@ -125,7 +125,7 @@ export default function Community() {
           
           {/* Post Creation Modal */}
           {showForm && (
-            <div className="bg-white border-2 border-purple-100 rounded-[3.5rem] p-10 md:p-12 shadow-3xl shadow-purple-100 animate-in slide-in-from-top-10 duration-500 overflow-hidden relative">
+            <div className="bg-white border-2 border-purple-100 rounded-[2.5rem] p-8 md:p-10 shadow-3xl shadow-purple-100 animate-in slide-in-from-top-10 duration-500 overflow-hidden relative">
               <div className="absolute top-0 left-0 w-full h-2 bg-purple-600" />
               <div className="flex justify-between items-center mb-10">
                  <div className="space-y-2">
@@ -157,7 +157,7 @@ export default function Community() {
 
           <div className="space-y-8">
             {posts.map(post => (
-              <div key={post._id} className="group relative bg-white border border-slate-100 rounded-[3.5rem] p-10 hover:shadow-2xl hover:shadow-slate-100 transition-all duration-700 flex flex-col md:flex-row gap-10 overflow-hidden text-slate-900">
+              <div key={post._id} className="group relative bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:shadow-2xl hover:shadow-slate-100 transition-all duration-700 flex flex-col md:flex-row gap-10 overflow-hidden text-slate-900">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full translate-x-10 -translate-y-10 group-hover:bg-purple-50 transition-colors duration-700"></div>
                 
                 {/* Vote Area */}

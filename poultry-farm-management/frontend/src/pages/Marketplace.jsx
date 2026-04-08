@@ -151,7 +151,7 @@ export default function Marketplace() {
     <div className="space-y-16 pb-20">
       
       {/* Cinematic Header Container */}
-      <div className="relative overflow-hidden bg-white border border-slate-100 rounded-[4rem] p-12 lg:p-20 text-slate-900 shadow-3xl shadow-slate-100">
+      <div className="relative overflow-hidden bg-white border border-slate-100 rounded-[2.5rem] p-8 lg:p-12 text-slate-900 shadow-3xl shadow-slate-100">
         <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-emerald-500/10 via-emerald-500/5 to-transparent pointer-events-none"></div>
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none"></div>
         
@@ -174,7 +174,7 @@ export default function Marketplace() {
             {isFarmer && ( activeTab === 'my-listings' || activeTab === 'orders' ) && (
               <button 
                 onClick={() => setShowCreateModal(true)}
-                className="group flex items-center justify-center gap-6 bg-emerald-600 hover:bg-emerald-500 text-white px-10 py-6 rounded-[2.5rem] font-black text-lg transition-all hover:-translate-y-2 active:scale-95 shadow-2xl shadow-emerald-100"
+                className="group flex items-center justify-center gap-6 bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-2xl font-black text-base transition-all hover:-translate-y-2 active:scale-95 shadow-2xl shadow-emerald-100"
               >
                 <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" /> 
                 Sell My Stock
@@ -264,8 +264,8 @@ export default function Marketplace() {
                </div>
             ) : (
               filteredListings.map(listing => (
-                <div key={listing._id} className="group relative bg-white rounded-[4rem] border border-slate-100 overflow-hidden hover:shadow-4xl hover:shadow-slate-200 transition-all duration-700 flex flex-col hover:-translate-y-2">
-                   <div className="h-80 overflow-hidden relative border-b border-slate-50">
+                <div key={listing._id} className="group relative bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden hover:shadow-4xl hover:shadow-slate-200 transition-all duration-700 flex flex-col hover:-translate-y-2">
+                   <div className="h-64 overflow-hidden relative border-b border-slate-50">
                     <img 
                       src={getConsistentImage(listing.productName, listing.category)} 
                       alt="" 
@@ -278,7 +278,7 @@ export default function Marketplace() {
                     </div>
                   </div>
                   
-                  <div className="p-12 flex-1 flex flex-col space-y-8">
+                  <div className="p-8 flex-1 flex flex-col space-y-6">
                     <div className="flex justify-between items-start">
                       <div className="space-y-1">
                         <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tight leading-none group-hover:text-emerald-600 transition-colors">{listing.productName}</h3>
@@ -321,7 +321,7 @@ export default function Marketplace() {
         {activeTab === 'my-listings' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {myListings.map(l => (
-              <div key={l._id} className="group bg-white border border-slate-100 rounded-[4rem] p-10 hover:shadow-2xl transition-all duration-700 relative overflow-hidden flex flex-col">
+              <div key={l._id} className="group bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:shadow-2xl transition-all duration-700 relative overflow-hidden flex flex-col">
                  <div className="absolute top-8 right-8">
                     <button onClick={() => handleDeleteListing(l._id)} className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 hover:bg-rose-500 hover:text-white transition-all transform hover:rotate-12">
                        <Trash2 size={20} />
@@ -375,7 +375,7 @@ export default function Marketplace() {
                </div>
             ) : (
               orders.map(o => (
-                <div key={o._id} className="group bg-white border border-slate-100 rounded-[3.5rem] p-8 hover:shadow-2xl transition-all duration-700 flex flex-col lg:flex-row justify-between items-center gap-10 border-l-[12px] border-l-slate-100 hover:border-l-emerald-600">
+                <div key={o._id} className="group bg-white border border-slate-100 rounded-[2.5rem] p-6 hover:shadow-2xl transition-all duration-700 flex flex-col lg:flex-row justify-between items-center gap-10 border-l-[12px] border-l-slate-100 hover:border-l-emerald-600">
                   <div className="flex items-center gap-8 w-full lg:w-auto">
                     <div className="h-24 w-24 rounded-[2rem] overflow-hidden border border-slate-100 shrink-0">
                        <img src={getConsistentImage(o.listing?.productName, o.listing?.category)} className="w-full h-full object-cover" alt="" />

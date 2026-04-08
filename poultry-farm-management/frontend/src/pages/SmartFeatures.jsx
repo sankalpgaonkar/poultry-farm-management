@@ -72,9 +72,9 @@ export default function SmartFeatures() {
 
       {/* Daily Farm Health Report */}
       <section className="relative group">
-        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[4rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
         {report ? (
-          <div className="relative bg-white rounded-[4rem] p-12 md:p-16 text-slate-900 shadow-3xl shadow-slate-200 overflow-hidden border border-slate-100">
+          <div className="relative bg-white rounded-[2.5rem] p-10 md:p-12 text-slate-900 shadow-3xl shadow-slate-200 overflow-hidden border border-slate-100">
             <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-blue-500/5 to-transparent pointer-events-none"></div>
             
             <div className="relative z-10 grid xl:grid-cols-12 gap-16 items-center">
@@ -94,7 +94,7 @@ export default function SmartFeatures() {
                 
                 <div className="grid md:grid-cols-2 gap-8">
                   {report.actionItems.map((ai, i) => (
-                    <div key={i} className="bg-slate-50 border border-slate-100 rounded-[2rem] p-8 flex items-start gap-6 group/item hover:bg-blue-50 transition-all duration-500">
+                    <div key={i} className="bg-slate-50 border border-slate-100 rounded-[1.5rem] p-6 flex items-start gap-6 group/item hover:bg-blue-50 transition-all duration-500">
                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-400 shrink-0 group-hover/item:bg-blue-500 group-hover/item:text-white transition-all shadow-sm">
                           <CheckCircle size={24} />
                        </div>
@@ -142,7 +142,7 @@ export default function SmartFeatures() {
 
            <div className="space-y-6">
             {buyers.map(b => (
-              <div key={b.id} className="group relative bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:shadow-2xl hover:shadow-slate-100 transition-all duration-500 text-slate-900">
+              <div key={b.id} className="group relative bg-white border border-slate-100 rounded-[2rem] p-6 hover:shadow-2xl hover:shadow-slate-100 transition-all duration-500 text-slate-900">
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center gap-6">
                      <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-900 font-black text-2xl group-hover:bg-slate-900 group-hover:text-white transition-all duration-500 border border-slate-100">
@@ -191,7 +191,7 @@ export default function SmartFeatures() {
 
            <div className="space-y-6">
             {schemes.map(s => (
-              <div key={s.id} className="group bg-white border border-slate-100 rounded-[2.5rem] p-10 hover:shadow-2xl hover:shadow-slate-100 transition-all duration-500 relative overflow-hidden text-slate-900">
+              <div key={s.id} className="group bg-white border border-slate-100 rounded-[2rem] p-8 hover:shadow-2xl hover:shadow-slate-100 transition-all duration-500 relative overflow-hidden text-slate-900">
                 <div className="absolute top-0 right-0 p-8">
                    <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-400 group-hover:scale-125 transition-transform duration-700">
                       <TrendingUp size={24} />

@@ -78,7 +78,7 @@ export default function DashboardOverview() {
     <div className="space-y-12 pb-20">
       
       {/* Friendly Header Section */}
-      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-8 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-soft">
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-8 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-soft">
         <div className="space-y-4">
            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 rounded-full border border-emerald-100">
               <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600">Active Status</span>
@@ -111,7 +111,7 @@ export default function DashboardOverview() {
           { label: 'Orders', value: activeOrdersCount, sub: 'Pending Orders', icon: Truck, color: 'amber' },
           { label: 'My Units', value: farms.length, sub: 'Active Farms', icon: Activity, color: 'indigo' },
         ].map((stat, i) => (
-          <div key={i} className="group bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-soft hover:shadow-strong transition-all overflow-hidden flex flex-col">
+          <div key={i} className="group bg-white rounded-[2rem] p-6 border border-slate-100 shadow-soft hover:shadow-strong transition-all overflow-hidden flex flex-col">
             <div className="flex justify-between items-start mb-8">
                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-${stat.color}-100 bg-${stat.color}-500 transition-transform group-hover:scale-110`}>
                   <stat.icon size={24} />
@@ -141,7 +141,7 @@ export default function DashboardOverview() {
       {/* Action Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Marketplace Card */}
-        <Link to="/farmer/listings" className="group relative bg-emerald-600 rounded-[2.5rem] p-10 overflow-hidden shadow-soft hover:shadow-strong transition-all">
+        <Link to="/farmer/listings" className="group relative bg-emerald-600 rounded-[2rem] p-8 overflow-hidden shadow-soft hover:shadow-strong transition-all">
            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
            <div className="relative z-10 flex flex-col h-full justify-between gap-12">
               <div className="space-y-6">
@@ -163,7 +163,7 @@ export default function DashboardOverview() {
         </Link>
         
         {/* Store Card */}
-        <Link to="/farmer/store" className="group relative bg-white border border-slate-100 rounded-[2.5rem] p-10 overflow-hidden shadow-soft hover:shadow-strong transition-all">
+        <Link to="/farmer/store" className="group relative bg-white border border-slate-100 rounded-[2rem] p-8 overflow-hidden shadow-soft hover:shadow-strong transition-all">
            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl -mr-32 -mt-32"></div>
            <div className="relative z-10 flex flex-col h-full justify-between gap-12">
               <div className="space-y-6">
@@ -186,7 +186,7 @@ export default function DashboardOverview() {
       </div>
 
       {/* Production Chart Section */}
-      <div className="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-soft relative overflow-hidden">
+      <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-soft relative overflow-hidden">
          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-12 relative z-10">
             <div className="space-y-2">
                <h4 className="text-2xl font-extrabold text-slate-900 tracking-tight">Egg Production Trends</h4>
@@ -252,7 +252,7 @@ export default function DashboardOverview() {
 
       {/* Health Alerts Section */}
       {alerts.length > 0 && (
-        <div className="bg-rose-50/50 rounded-[2.5rem] p-10 border border-rose-100 relative overflow-hidden">
+        <div className="bg-rose-50/50 rounded-[2rem] p-8 border border-rose-100 relative overflow-hidden">
            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-10 relative z-10">
               <div className="space-y-2">
                  <div className="flex items-center gap-3">
@@ -263,9 +263,9 @@ export default function DashboardOverview() {
                  </div>
                  <p className="text-xs font-bold text-rose-500 uppercase tracking-widest">Important warnings for your livestock</p>
               </div>
-              <button className="h-12 px-6 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg transition-all">
+              <Link to="/farmer/health" className="h-12 px-6 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg transition-all flex items-center justify-center">
                 Take Action
-              </button>
+              </Link>
            </div>
            
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">

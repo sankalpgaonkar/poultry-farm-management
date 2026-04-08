@@ -75,7 +75,7 @@ export default function Signup() {
                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
                  Join Our Farming Community
               </div>
-              <h1 className="text-8xl font-black text-slate-900 leading-[0.85] tracking-tight uppercase">
+              <h1 className="text-6xl lg:text-7xl font-black text-slate-900 leading-[0.85] tracking-tight uppercase">
                  Create <br />
                  <span className="text-emerald-600">Account.</span>
               </h1>
@@ -138,7 +138,7 @@ export default function Signup() {
                  <button
                    type="button"
                    onClick={() => setRole('Farmer')}
-                   className={`h-24 rounded-[1.5rem] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-3 border-2 ${
+                   className={`h-20 rounded-[1.5rem] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-3 border-2 ${
                      role === 'Farmer' 
                      ? 'bg-emerald-600 text-white border-emerald-500 shadow-xl shadow-emerald-200 translate-y-[-2px]' 
                      : 'bg-white text-slate-400 border-slate-100 hover:border-slate-200 hover:text-slate-600'
@@ -150,7 +150,7 @@ export default function Signup() {
                  <button
                    type="button"
                    onClick={() => setRole('Buyer')}
-                   className={`h-24 rounded-[1.5rem] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-3 border-2 ${
+                   className={`h-20 rounded-[1.5rem] font-black text-xs uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-3 border-2 ${
                      role === 'Buyer' 
                      ? 'bg-emerald-600 text-white border-emerald-500 shadow-xl shadow-emerald-200 translate-y-[-2px]' 
                      : 'bg-white text-slate-400 border-slate-100 hover:border-slate-200 hover:text-slate-600'
@@ -171,7 +171,7 @@ export default function Signup() {
                   </div>
                   <input
                     type="text"
-                    className="w-full bg-white border border-slate-200 px-16 py-6 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
+                    className="w-full bg-white border border-slate-200 px-12 py-4 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
                     placeholder="Enter your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -188,7 +188,7 @@ export default function Signup() {
                   </div>
                   <input
                     type="text"
-                    className="w-full bg-white border border-slate-200 px-16 py-6 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
+                    className="w-full bg-white border border-slate-200 px-12 py-4 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
                     placeholder="Enter Mobile/Email"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
@@ -205,7 +205,7 @@ export default function Signup() {
                   </div>
                   <input
                     type="password"
-                    className="w-full bg-white border border-slate-200 px-16 py-6 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
+                    className="w-full bg-white border border-slate-200 px-12 py-4 rounded-[2rem] outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/30 transition-all font-bold text-slate-900 placeholder:text-slate-300"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -218,7 +218,7 @@ export default function Signup() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-20 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-[2rem] transition-all shadow-xl shadow-emerald-200 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-4 text-sm uppercase tracking-wider disabled:opacity-50"
+              className="w-full h-16 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-[2rem] transition-all shadow-xl shadow-emerald-200 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-4 text-sm uppercase tracking-wider disabled:opacity-50"
             >
               {loading ? 'Creating Account...' : 'Register'} 
               {!loading && <ArrowRight size={20} />}
