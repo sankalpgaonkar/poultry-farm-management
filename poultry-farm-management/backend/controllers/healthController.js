@@ -2,7 +2,10 @@
 const analyzeHealth = async (req, res) => {
   try {
     const { symptoms } = req.body;
-    // symptoms: array of strings e.g. ["sneezing", "lethargy", "drop in eggs", "bloody diarrhea"]
+    
+    if (!Array.isArray(symptoms) || symptoms.length === 0) {
+      return res.status(400).json({ message: 'Symptoms must be provided as a non-empty array.' });
+    }
     
     // Knowledge Base
     const diseaseDB = [

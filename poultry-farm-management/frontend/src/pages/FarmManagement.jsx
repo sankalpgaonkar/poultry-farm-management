@@ -93,86 +93,78 @@ export default function FarmManagement() {
   return (
     <div className="space-y-16 pb-20">
       
-      {/* Cinematic Header Layer */}
-      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-12">
-        <div className="space-y-6 max-w-3xl">
-           <div className="inline-flex items-center gap-4 px-6 py-3 bg-white rounded-full border border-slate-100 shadow-sm">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></div>
-              <span className="text-sm font-bold uppercase tracking-[0.2em] text-slate-400 italic">Farm List</span>
+      {/* Optimized Header Layer */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-soft relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50/50 rounded-full translate-x-32 -translate-y-32 blur-3xl"></div>
+        
+        <div className="space-y-4 relative z-10">
+           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 rounded-full border border-emerald-100">
+              <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600">Overview</span>
            </div>
-           <h1 className="text-6xl lg:text-8xl font-black text-slate-950 tracking-tight uppercase leading-[0.85]">
-              My Poultry <br /><span className="text-emerald-600">Farms.</span>
+           <h1 className="text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              My Poultry <span className="text-emerald-600">Farms</span>
            </h1>
-           <p className="text-slate-400 font-bold text-[12px] uppercase tracking-[0.1em] leading-loose max-w-xl">
-             Manage your farms and update daily records. Track chickens, feed, and eggs easily.
+           <p className="text-slate-500 font-medium text-sm leading-relaxed max-w-xl">
+             Manage your farms and update daily records. Keep track of chickens, feed, and eggs with ease.
            </p>
         </div>
         
         <button 
           onClick={() => setShowFarmModal(true)}
-          className="h-24 px-12 bg-emerald-600 text-white rounded-[2.5rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-emerald-700 hover:-translate-y-2 transition-all duration-700 shadow-4xl shadow-emerald-100 flex items-center justify-center gap-6 group"
+          className="h-16 px-8 bg-emerald-600 text-white rounded-2xl font-bold text-sm uppercase tracking-wider hover:bg-emerald-700 hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-emerald-100 flex items-center justify-center gap-3 group relative z-10"
         >
-          <Plus size={28} className="group-hover:rotate-[360deg] transition-transform duration-1000" strokeWidth={3} />
+          <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
           Add New Farm
         </button>
       </div>
 
+
       {farms.length === 0 ? (
-        <div className="bg-slate-50/50 rounded-[4.5rem] p-40 text-center border-2 border-dashed border-slate-200 flex flex-col items-center gap-10 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-50"></div>
-          <div className="w-28 h-28 bg-white rounded-[2.8rem] flex items-center justify-center text-slate-200 shadow-3xl relative z-10">
-             <Database size={56} strokeWidth={1.5} />
+        <div className="bg-white rounded-[3rem] p-24 text-center border border-slate-100 shadow-soft flex flex-col items-center gap-8 relative overflow-hidden">
+          <div className="w-20 h-20 bg-emerald-50 rounded-3xl flex items-center justify-center text-emerald-600 shadow-inner">
+             <Database size={32} />
           </div>
-          <div className="space-y-4 relative z-10">
-            <h3 className="text-3xl font-black text-slate-950 uppercase tracking-tight">No farms added yet</h3>
-            <p className="text-slate-400 font-bold text-sm uppercase tracking-[0.2em] max-w-xs mx-auto italic">Click the button below to add your first poultry farm.</p>
+          <div className="space-y-2 relative z-10">
+            <h3 className="text-2xl font-bold text-slate-900 tracking-tight">No farms added yet</h3>
+            <p className="text-slate-500 font-medium text-sm max-w-xs mx-auto">Start by adding your first poultry farm using the button below.</p>
           </div>
-          <button onClick={() => setShowFarmModal(true)} className="px-12 py-6 bg-emerald-600 text-white rounded-[1.8rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-emerald-700 transition-all relative z-10 shadow-3xl shadow-emerald-100">Add First Farm</button>
+          <button onClick={() => setShowFarmModal(true)} className="px-8 py-4 bg-emerald-600 text-white rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-emerald-700 transition-all shadow-md shadow-emerald-100">Add First Farm</button>
         </div>
+
       ) : (
-        <div className="grid gap-12 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {farms.map((farm) => (
-            <div key={farm._id} className="group relative bg-white border border-slate-100 rounded-[4rem] p-12 hover:shadow-4xl transition-all duration-1000 overflow-hidden flex flex-col hover:-translate-y-4">
+            <div key={farm._id} className="group relative bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:shadow-strong transition-all duration-300 overflow-hidden flex flex-col">
               
-              {/* Background Aesthetic Nodes */}
-              <div className="absolute top-0 right-0 w-48 h-48 bg-slate-50/50 rounded-full translate-x-12 -translate-y-12 group-hover:bg-emerald-50 transition-colors duration-1000"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-500/5 blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-              
-              <div className="flex justify-between items-start mb-12 relative z-10">
-                <div className="space-y-3">
-                   <div className="flex items-center gap-3">
-                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,1)]"></div>
-                      <span className="text-xs font-bold text-emerald-500 uppercase tracking-wider italic leading-none">Running</span>
+              <div className="flex justify-between items-start mb-8 relative z-10">
+                <div className="space-y-1.5">
+                   <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+                      <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Active</span>
                    </div>
-                   <h3 className="text-3xl font-black text-slate-950 uppercase tracking-tight group-hover:text-emerald-600 transition-colors leading-[0.9]">{farm.name}</h3>
-                   <div className="flex items-center gap-2 text-slate-400 text-sm font-bold uppercase tracking-[0.1em]">
-                      <MapPin size={12} className="text-emerald-500/60" /> {farm.location}
+                   <h3 className="text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors leading-tight truncate">{farm.name}</h3>
+                   <div className="flex items-center gap-1.5 text-slate-500 text-xs font-semibold">
+                      <MapPin size={12} className="text-slate-400" /> {farm.location}
                    </div>
                 </div>
-                <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-2xl text-xs font-bold uppercase tracking-[0.1em] flex items-center gap-3 shadow-xl shadow-slate-100/50 text-slate-600 group-hover:border-emerald-200 group-hover:text-emerald-600 transition-colors">
-                   <ShieldCheck size={14} className="text-emerald-500" /> Everything OK
+                <div className="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 text-slate-600">
+                   <ShieldCheck size={12} className="text-emerald-500" strokeWidth={2.5} /> Healthy
                 </div>
               </div>
 
-              <div className="bg-slate-50 rounded-[2.5rem] p-10 border border-slate-100 space-y-8 mb-12 relative z-10 group-hover:bg-white group-hover:shadow-3xl transition-all duration-700">
-                <div className="flex justify-between items-center">
-                  <div className="space-y-2">
-                     <span className="text-xs font-bold text-slate-300 uppercase tracking-[0.2em] italic block">Chickens in Farm</span>
-                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-400 shadow-sm border border-slate-100">
-                           <Bird size={24} strokeWidth={2.5} />
-                        </div>
-                        <span className="text-5xl font-black text-slate-950 tracking-tight tabular-nums leading-none">{farm.totalChickens}</span>
+              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 space-y-6 mb-8 relative z-10">
+                <div className="flex justify-between items-end">
+                  <div className="space-y-1">
+                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Chickens</span>
+                     <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-extrabold text-slate-900 tracking-tight tabular-nums">{farm.totalChickens}</span>
+                        <span className="text-xs font-bold text-slate-400 uppercase">Birds</span>
                      </div>
-                  </div>
-                  <div className="text-right">
-                     <p className="text-[20px] font-black text-emerald-500 tracking-tight leading-none mb-1">92%</p>
-                     <p className="text-xs font-bold text-slate-300 uppercase tracking-wider leading-none">Capacity</p>
                   </div>
                 </div>
                 
-                <div className="h-3 w-full bg-slate-200/50 rounded-full overflow-hidden">
-                   <div className="h-full bg-emerald-500 rounded-full transition-all duration-1000 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.5)]" style={{ width: `${Math.min((farm.totalChickens / 1000) * 100, 100)}%` }}></div>
+                <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                   <div className="h-full bg-emerald-500 rounded-full transition-all duration-1000" style={{ width: `${Math.min((farm.totalChickens / 2000) * 100, 100)}%` }}></div>
                 </div>
               </div>
 
@@ -182,13 +174,14 @@ export default function FarmManagement() {
                   setCurrentChickens(farm.totalChickens);
                   setShowLogModal(true); 
                 }}
-                className="w-full h-20 bg-emerald-600 text-white font-black text-sm uppercase tracking-[0.2em] rounded-[1.8rem] hover:bg-emerald-700 hover:-translate-y-2 transition-all duration-700 flex items-center justify-center gap-4 group/btn relative z-10 shadow-3xl shadow-emerald-100"
+                className="w-full h-14 bg-emerald-600 text-white font-bold text-sm uppercase tracking-wider rounded-xl hover:bg-emerald-700 transition-all flex items-center justify-center gap-2 shadow-md shadow-emerald-50"
               >
-                Update Daily Data <ChevronRight size={16} className="group-hover/btn:translate-x-2 transition-transform duration-500" strokeWidth={3} />
+                Update Numbers <ChevronRight size={14} />
               </button>
             </div>
           ))}
         </div>
+
       )}
 
       {/* Initialize Farm Modal */}

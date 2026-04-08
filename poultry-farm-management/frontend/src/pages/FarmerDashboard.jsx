@@ -105,24 +105,25 @@ export default function FarmerDashboard() {
       <aside className={`fixed inset-y-0 left-0 z-50 w-[300px] bg-white border-r border-slate-100 transition-all duration-700 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} xl:relative xl:translate-x-0 flex flex-col shadow-xl shadow-slate-200/50`}>
         
         {/* Simple Brand Header */}
-        <div className="p-10 pb-8">
+        <div className="p-8 pb-6">
            <div className="flex items-center gap-4 group cursor-pointer">
-              <div className="relative w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-xl transition-all duration-700">
-                 <Egg size={24} className="fill-white" />
-                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white"></div>
+              <div className="relative w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg transition-all duration-300">
+                 <Egg size={20} className="fill-white" />
+                 <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white"></div>
               </div>
               <div className="space-y-0.5">
-                 <h1 className="text-2xl font-black text-slate-900 tracking-tight leading-none">PoultrySmart.</h1>
-                 <p className="text-sm font-bold tracking-wider text-slate-400 uppercase leading-none">Farmer Dashboard</p>
+                 <h1 className="text-xl font-bold text-slate-900 tracking-tight leading-none">PoultrySmart.</h1>
+                 <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase leading-none">Management System</p>
               </div>
            </div>
         </div>
 
+
         {/* Navigation Clusters */}
-        <div className="flex-1 overflow-y-auto px-6 space-y-10 py-6 no-scrollbar">
+        <div className="flex-1 overflow-y-auto px-6 space-y-8 py-4 no-scrollbar">
            {navGroups.map((group) => (group.items.length > 0 && (
-             <div key={group.title} className="space-y-4">
-               <h3 className="text-sm font-black text-slate-300 uppercase tracking-wider px-4">{group.title}</h3>
+             <div key={group.title} className="space-y-3">
+               <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em] px-4">{group.title}</h3>
                <div className="space-y-1">
                  {group.items.map((item) => {
                     const isActive = location.pathname === item.path || (item.path !== '/farmer' && location.pathname.startsWith(item.path));
@@ -130,17 +131,17 @@ export default function FarmerDashboard() {
                       <Link
                         key={item.path}
                         to={item.path}
-                        className={`group flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-500 relative ${
+                        className={`group flex items-center justify-between px-5 py-3.5 rounded-xl transition-all duration-300 relative ${
                           isActive 
-                            ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-100' 
-                            : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                            ? 'bg-emerald-600 text-white shadow-md' 
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                         }`}
                       >
-                        <div className="flex items-center gap-4 relative z-10">
-                           <item.icon size={20} className={`transition-all duration-500 ${isActive ? 'text-white' : 'text-slate-300 group-hover:text-emerald-600'}`} />
-                           <span className="text-sm font-bold">{item.label}</span>
+                        <div className="flex items-center gap-3.5 relative z-10">
+                           <item.icon size={18} className={`transition-all duration-300 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-emerald-600'}`} />
+                           <span className="text-sm font-semibold">{item.label}</span>
                         </div>
-                        {isActive && <ChevronRight size={14} className="text-white relative z-10" />}
+                        {isActive && <ChevronRight size={12} className="text-white relative z-10" />}
                       </Link>
                     );
                  })}
@@ -149,27 +150,27 @@ export default function FarmerDashboard() {
            )))}
         </div>
 
+
         {/* User Profile & Logout */}
-        <div className="p-8 border-t border-slate-50">
-           <div className="bg-slate-50 rounded-2xl p-4 mb-6 flex items-center gap-4 border border-slate-100 overflow-hidden relative">
-              <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-emerald-600 shadow-sm font-black text-xl border border-slate-100">
+        <div className="p-6 border-t border-slate-100">
+           <div className="bg-slate-50 rounded-xl p-3.5 mb-4 flex items-center gap-3 border border-slate-200/50 overflow-hidden relative">
+              <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-emerald-600 shadow-sm font-bold text-lg border border-slate-200">
                  {userInfo.name.charAt(0)}
               </div>
               <div className="flex-1 truncate">
-                 <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Farmer Account</span>
-                 </div>
-                 <h4 className="text-sm font-black text-slate-900 truncate uppercase tracking-tight">{userInfo.name}</h4>
+                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Farmer Account</p>
+                 <h4 className="text-sm font-bold text-slate-900 truncate tracking-tight">{userInfo.name}</h4>
               </div>
            </div>
            
            <button 
              onClick={handleLogout}
-             className="w-full flex items-center justify-between px-6 py-4 bg-white border border-slate-200 rounded-2xl text-sm font-black text-rose-500 uppercase tracking-wider hover:bg-rose-50 hover:border-rose-200 transition-all active:scale-95 group"
+             className="w-full flex items-center justify-between px-5 py-3.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-rose-500 uppercase tracking-widest hover:bg-rose-50 hover:border-rose-200 transition-all active:scale-95 group"
            >
-              Logout <LogOut size={16} />
+              Logout <LogOut size={14} />
            </button>
         </div>
+
       </aside>
 
       {/* Main Content Area */}

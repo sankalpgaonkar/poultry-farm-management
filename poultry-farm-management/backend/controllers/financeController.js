@@ -10,6 +10,12 @@ const calculateProfit = async (req, res) => {
       utilitiesCostDaily 
     } = req.body;
 
+    // Validation
+    const fields = [birdsCount, dailyFeedKg, feedCostPerKg, dailyEggProduction, eggSalePrice, laborCostDaily, utilitiesCostDaily];
+    if (fields.some(f => f === undefined || isNaN(f) || f < 0)) {
+      return res.status(400).json({ message: 'All inputs must be valid non-negative numbers.' });
+    }
+
     const totalFeedCost = dailyFeedKg * feedCostPerKg;
     const totalDailyCost = totalFeedCost + laborCostDaily + utilitiesCostDaily;
     const totalDailyRevenue = dailyEggProduction * eggSalePrice;

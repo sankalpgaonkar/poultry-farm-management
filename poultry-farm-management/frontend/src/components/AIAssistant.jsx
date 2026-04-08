@@ -155,17 +155,17 @@ export default function AIAssistant({ isStatic = false }) {
   ];
 
   const containerClasses = isStatic 
-    ? "w-full h-[calc(100vh-14rem)] flex flex-col bg-white rounded-[3rem] shadow-3xl border border-slate-100 overflow-hidden"
-    : `fixed bottom-8 right-8 z-[100] w-[95%] md:w-[450px] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${isMinimized ? 'h-24 translate-y-2' : 'h-[750px]'} flex flex-col bg-white rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-20 fade-in duration-700 scale-100`;
+    ? "w-full h-[calc(100vh-14rem)] flex flex-col bg-white rounded-[2.5rem] shadow-soft border border-slate-100 overflow-hidden"
+    : `fixed bottom-8 right-8 z-[100] w-[95%] md:w-[420px] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${isMinimized ? 'h-20' : 'h-[650px]'} flex flex-col bg-white rounded-[2.5rem] shadow-strong border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-20 duration-700`;
 
   if (!isOpen && !isStatic) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-10 right-10 z-[100] bg-slate-900 hover:bg-emerald-600 text-white w-20 h-20 rounded-[2rem] shadow-[0_30px_60px_-12px_rgba(0,0,0,0.2)] transition-all duration-500 hover:scale-110 active:scale-95 group flex items-center justify-center border border-slate-800"
+        className="fixed bottom-10 right-10 z-[100] bg-slate-900 border border-slate-800 text-white w-20 h-20 rounded-[2rem] shadow-strong hover:scale-105 active:scale-95 transition-all group flex items-center justify-center"
       >
-        <div className="absolute inset-0 bg-emerald-500 rounded-full blur-[40px] opacity-20 group-hover:opacity-40 animate-pulse" />
-        <BrainCircuit size={32} className="relative z-10 transition-transform group-hover:rotate-12" />
+        <div className="absolute inset-0 bg-emerald-500 rounded-full blur-[40px] opacity-10 animate-pulse" />
+        <BrainCircuit size={32} className="relative z-10" />
       </button>
     );
   }
@@ -173,27 +173,27 @@ export default function AIAssistant({ isStatic = false }) {
   return (
     <div className={containerClasses}>
       {/* Friendly Header */}
-      <div className="relative overflow-hidden bg-slate-50 p-8 flex items-center justify-between shrink-0 border-b border-slate-100">
+      <div className="relative overflow-hidden bg-slate-50 p-6 flex items-center justify-between shrink-0 border-b border-slate-100">
         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-[40px] -mr-16 -mt-16"></div>
         <div className="relative z-10 flex items-center gap-4">
-          <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-emerald-100">
-            <Bot size={24} />
+          <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-emerald-100">
+            <Bot size={20} />
           </div>
           <div>
-            <h3 className="text-slate-900 font-black text-sm tracking-widest uppercase italic">Kisan Mitra AI</h3>
+            <h3 className="text-slate-900 font-bold text-xs tracking-wide uppercase">Kisan Mitra AI</h3>
             <div className="flex items-center gap-2 mt-1">
-               <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />
-               <span className="text-[8px] text-emerald-600/60 font-black tracking-[0.3em] uppercase">Active & Ready</span>
+               <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+               <span className="text-[10px] text-emerald-600/70 font-bold uppercase tracking-wider">Active</span>
             </div>
           </div>
         </div>
         {!isStatic && (
-          <div className="flex items-center gap-4 relative z-10">
-            <button onClick={() => setIsMinimized(!isMinimized)} className="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-300 transition-all">
-              {isMinimized ? <Maximize2 size={18} /> : <Minus size={18} />}
+          <div className="flex items-center gap-3 relative z-10">
+            <button onClick={() => setIsMinimized(!isMinimized)} className="w-8 h-8 rounded-lg bg-slate-200/50 flex items-center justify-center text-slate-500 hover:text-slate-900 transition-all">
+              {isMinimized ? <Maximize2 size={16} /> : <Minus size={16} />}
             </button>
-            <button onClick={() => setIsOpen(false)} className="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all">
-              <X size={18} />
+            <button onClick={() => setIsOpen(false)} className="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center text-rose-500 hover:bg-rose-100 transition-all">
+              <X size={16} />
             </button>
           </div>
         )}
@@ -202,34 +202,35 @@ export default function AIAssistant({ isStatic = false }) {
       {(!isMinimized || isStatic) && (
         <>
           {/* Chat Messages */}
-          <div className="flex-grow overflow-y-auto px-8 py-10 space-y-8 bg-white scrollbar-hide">
+          <div className="flex-grow overflow-y-auto px-6 py-8 space-y-6 bg-white scrollbar-hide">
             {chat.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-4 duration-500`}>
+              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-500`}>
                 <div className={`max-w-[85%] relative overflow-hidden transition-all duration-500 ${
                   msg.role === 'user' 
-                  ? 'bg-slate-900 text-white rounded-[2rem] rounded-tr-none px-6 py-4 shadow-xl shadow-slate-200 font-bold text-xs uppercase tracking-wider' 
-                  : 'bg-slate-50 text-slate-800 border border-slate-100 rounded-[2rem] rounded-tl-none px-6 py-5 shadow-sm font-medium text-xs'
+                  ? 'bg-slate-900 text-white rounded-2xl rounded-tr-none px-5 py-3 shadow-md font-semibold text-sm' 
+                  : 'bg-slate-50 text-slate-800 border border-slate-100 rounded-2xl rounded-tl-none px-5 py-4 shadow-sm text-sm'
                 }`}>
                   {msg.role === 'user' ? (
-                     <div className="flex items-center gap-3">
-                        <User size={14} className="opacity-60" />
-                        <span className="font-sans">{msg.content}</span>
+                     <div className="flex items-center gap-2">
+                        <User size={12} className="opacity-50" />
+                        <span>{msg.content}</span>
                      </div>
                   ) : renderContent(msg.content)}
                   
                   {msg.role === 'bot' && extractSuggestions(msg.content).length > 0 && (
-                    <div className="mt-6 flex flex-wrap gap-2">
+                    <div className="mt-4 flex flex-wrap gap-2">
                        {extractSuggestions(msg.content).map((suggestion, sIdx) => (
                          <button
                            key={sIdx}
                            onClick={() => handleSend(suggestion)}
-                           className="text-[9px] bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all font-black uppercase tracking-[0.2em]"
+                           className="text-[10px] bg-emerald-50 text-emerald-600 px-3 py-1.5 rounded-lg border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all font-bold uppercase tracking-wider"
                          >
                            {suggestion}
                          </button>
                        ))}
                     </div>
                   )}
+
 
                   {msg.type === 'inventory_confirm' && (
                     <div className="mt-6 p-6 bg-emerald-50 rounded-3xl border border-emerald-100 space-y-4">
@@ -283,7 +284,7 @@ export default function AIAssistant({ isStatic = false }) {
           </div>
 
           {/* User Input Area */}
-          <div className="p-8 bg-slate-50 border-t border-slate-100 shrink-0">
+          <div className="p-6 bg-slate-50 border-t border-slate-100 shrink-0">
             <input 
               type="file" 
               ref={fileInputRef} 
@@ -291,15 +292,14 @@ export default function AIAssistant({ isStatic = false }) {
               accept="image/*" 
               onChange={handlePhotoUpload} 
             />
-            <div className="relative group flex items-center gap-4">
+            <div className="relative group flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => fileInputRef.current.click()}
                 disabled={loading || photoLoading}
-                className="w-16 h-16 bg-white text-slate-400 rounded-2xl hover:bg-emerald-50 hover:text-emerald-600 transition-all border border-slate-200 flex items-center justify-center shrink-0 shadow-sm"
-                title="Send Photo"
+                className="w-14 h-14 bg-white text-slate-400 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 transition-all border border-slate-200 flex items-center justify-center shrink-0 shadow-sm"
               >
-                {photoLoading ? <Loader2 size={24} className="animate-spin text-emerald-500" /> : <Camera size={24} />}
+                {photoLoading ? <Loader2 size={20} className="animate-spin text-emerald-500" /> : <Camera size={20} />}
               </button>
               <div className="relative flex-grow">
                 <input
@@ -307,29 +307,30 @@ export default function AIAssistant({ isStatic = false }) {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Ask something..."
-                  className="w-full bg-white border border-slate-200 pl-6 pr-16 py-5 rounded-2xl outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500 transition-all font-sans text-xs text-slate-900 placeholder:text-slate-400 tracking-wide shadow-sm"
+                  placeholder="Ask Kisan Mitra..."
+                  className="w-full bg-white border border-slate-200 pl-5 pr-14 py-4 rounded-xl outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500 transition-all font-semibold text-sm text-slate-900 placeholder:text-slate-400 shadow-sm"
                 />
                 <button
                   type="button"
                   onClick={() => handleSend()}
                   disabled={loading || !message.trim() || photoLoading}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-slate-900 text-white rounded-xl hover:bg-emerald-600 transition-all disabled:opacity-20 flex items-center justify-center shadow-lg"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-slate-900 text-white rounded-lg hover:bg-emerald-600 transition-all disabled:opacity-20 flex items-center justify-center shadow-lg"
                 >
-                  <Send size={18} />
+                  <Send size={16} />
                 </button>
               </div>
             </div>
-            <div className="flex justify-between items-center mt-6">
-               <p className="text-[8px] text-slate-400 font-black uppercase tracking-[0.4em]">
-                  Secure Chat Active
+            <div className="flex justify-between items-center mt-4">
+               <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none">
+                  Kisan Mitra AI Safe Chat
                </p>
-               <div className="flex items-center gap-2">
-                  <span className="text-[8px] text-slate-400 font-black uppercase tracking-[0.2em]">Safe to use</span>
-                  <Activity size={10} className="text-emerald-500/40" />
+               <div className="flex items-center gap-1.5 opacity-50">
+                  <span className="text-[9px] text-slate-400 font-bold uppercase">Secured</span>
+                  <ShieldCheck size={10} className="text-emerald-500" />
                </div>
             </div>
           </div>
+
         </>
       )}
     </div>

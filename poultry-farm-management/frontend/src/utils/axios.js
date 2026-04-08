@@ -28,4 +28,21 @@ api.interceptors.request.use(
   }
 );
 
+// Response interceptor for global error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Standardized error message extraction
+    const message = error.response?.data?.message || error.message || 'An unexpected error occurred.';
+    
+    // Dispatch global event for NotificationContext
+    const event = new CustomEvent('app-notify', {
+      detail: { message, type: 'error' }
+    });
+    window.dispatchEvent(event);
+
+    return Promise.reject(error);
+  }
+);
+
 export default api;

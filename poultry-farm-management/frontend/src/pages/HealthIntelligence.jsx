@@ -56,74 +56,74 @@ export default function HealthIntelligence() {
 
   return (
     <div className="space-y-12 pb-20">
-      
       {/* Friendly Header */}
-      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-10">
-        <div className="space-y-4 max-w-3xl">
-           <div className="inline-flex items-center gap-3 px-4 py-2 bg-rose-50 rounded-full border border-rose-100">
-              <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-black uppercase tracking-wider text-rose-600">Health Check</span>
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-soft relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-rose-50/50 rounded-full translate-x-32 -translate-y-32 blur-3xl opacity-30"></div>
+        
+        <div className="space-y-4 relative z-10">
+           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-rose-50 rounded-full border border-rose-100">
+              <span className="text-[11px] font-bold uppercase tracking-widest text-rose-600">Health Check</span>
            </div>
-           <h1 className="text-4xl lg:text-7xl font-black text-slate-900 tracking-tight uppercase leading-none">
-              Disease <span className="text-rose-600">Finder.</span>
+           <h1 className="text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight text-slate-900">
+              Disease <span className="text-rose-600">Finder</span>
            </h1>
-           <p className="text-slate-500 font-medium text-lg leading-relaxed">
+           <p className="text-slate-500 font-medium text-sm leading-relaxed max-w-xl">
              Pick the signs you see in your chickens. Kisan Mitra will tell you what could be wrong and how to fix it.
            </p>
         </div>
         
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-           <div className="h-20 px-8 bg-white border border-slate-200 rounded-3xl shadow-lg flex items-center gap-6">
-              <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-500">
-                 <HeartPulse size={24} className="animate-pulse" />
+        <div className="flex flex-wrap items-center gap-4 relative z-10 w-full lg:w-auto">
+           <div className="flex-1 lg:flex-none h-14 px-6 bg-white border border-slate-200 rounded-xl flex items-center gap-4 shadow-sm">
+              <div className="w-8 h-8 bg-rose-50 rounded-lg flex items-center justify-center text-rose-500">
+                 <HeartPulse size={16} className="animate-pulse" />
               </div>
               <div className="space-y-0.5">
-                 <span className="text-xs font-black uppercase text-slate-300 tracking-wider">Doctor Status</span>
-                 <h4 className="text-sm font-black text-slate-900 tracking-tight uppercase">Ready to Help</h4>
+                 <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-tight">Kisan Mitra AI</h4>
+                 <p className="text-[9px] font-bold text-slate-400 uppercase">Ready to Help</p>
               </div>
            </div>
            
-           <button onClick={clearSymptoms} className="h-20 w-20 bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-white hover:shadow-xl transition-all">
-              <RefreshCw size={24} />
+           <button onClick={clearSymptoms} className="h-14 w-14 bg-slate-900 text-white rounded-xl flex items-center justify-center hover:bg-slate-800 transition-all shadow-lg">
+              <RefreshCw size={18} />
            </button>
         </div>
       </div>
 
-      <div className="grid xl:grid-cols-12 gap-12">
-        
+      <div className="grid lg:grid-cols-12 gap-8">
         {/* Input - Left Side */}
-        <div className="xl:col-span-5 space-y-8">
-           <div className="bg-white border border-slate-100 rounded-[3rem] p-10 md:p-12 shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-16 opacity-[0.02] pointer-events-none">
-                 <Dna size={200} />
+        <div className="lg:col-span-4 space-y-6">
+           <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-soft relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+                 <Dna size={120} />
               </div>
               
-              <div className="flex justify-between items-center mb-8 relative z-10">
-                 <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight flex items-center gap-3">
-                    Select Signs <Microscope size={22} className="text-rose-400" />
-                 </h2>
+              <div className="flex items-center gap-3 mb-8 relative z-10">
+                 <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white">
+                    <Microscope size={20} />
+                 </div>
+                 <h2 className="text-lg font-bold text-slate-900 tracking-tight">Select Symptoms</h2>
               </div>
               
-              <div className="space-y-10 relative z-10">
-                <div className="space-y-4">
-                  <label className="block text-sm font-black uppercase text-slate-400 tracking-wider px-4">Signs / Symptoms</label>
+              <div className="space-y-8 relative z-10">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider px-1">Describe symptoms</label>
                   <textarea 
                     rows="4"
                     value={symptomsInput}
                     onChange={(e) => setSymptomsInput(e.target.value)}
-                    placeholder="Type signs e.g., sneezing, not eating..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-[2rem] p-8 focus:ring-4 focus:ring-rose-500/10 outline-none focus:border-rose-400/50 resize-none font-bold text-sm uppercase tracking-wide text-slate-900 transition-all placeholder:text-slate-300 shadow-inner"
+                    placeholder="E.g., sneezing, not eating..."
+                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-6 focus:ring-4 focus:ring-rose-500/10 outline-none focus:border-rose-400/50 resize-none font-semibold text-sm text-slate-900 placeholder:text-slate-400 transition-all shadow-inner"
                   />
                 </div>
 
-                <div className="space-y-4">
-                  <p className="text-sm font-black text-slate-400 uppercase tracking-wider px-4">Quick Select Signs :</p>
-                  <div className="flex flex-wrap gap-2 px-2">
+                <div className="space-y-3">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">Common Signs</p>
+                  <div className="flex flex-wrap gap-2">
                     {predefinedSymptoms.map(s => (
                       <button 
                         key={s} 
                         onClick={() => addSymptom(s)}
-                        className="bg-white hover:bg-rose-500 hover:text-white text-slate-500 border border-slate-100 px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wider transition-all active:scale-95 shadow-sm"
+                        className="bg-white hover:bg-rose-50 text-slate-600 border border-slate-100 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all hover:border-rose-200 active:scale-95 shadow-sm"
                       >
                         {s}
                       </button>
@@ -134,122 +134,100 @@ export default function HealthIntelligence() {
                 <button 
                   onClick={handleAnalyze} 
                   disabled={loading || !symptomsInput}
-                  className="w-full h-20 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-wider shadow-xl shadow-slate-200 enabled:hover:bg-rose-600 enabled:hover:-translate-y-1 transition-all flex items-center justify-center gap-4 group disabled:opacity-30"
+                  className="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg enabled:hover:bg-rose-600 transition-all flex items-center justify-center gap-3 group disabled:opacity-30"
                 >
                   {loading ? (
-                    <><Loader2 size={24} className="animate-spin text-rose-400" /> Kisan Mitra is Thinking...</>
+                    <><Loader2 size={16} className="animate-spin text-rose-400" /> Thinking...</>
                   ) : (
-                    <><Cpu size={24} className="text-rose-400" /> Find Disease</>
+                    <><Cpu size={16} className="text-rose-400" /> Analyze Now</>
                   )}
                 </button>
               </div>
            </div>
            
-           <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white flex items-center gap-8 border border-slate-800 shadow-xl group hover:-translate-y-1 transition-all">
-              <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-rose-600 transition-colors">
-                 <ShieldCheck size={32} className="text-rose-400 group-hover:text-white" />
+           <div className="bg-slate-900 rounded-[2rem] p-8 text-white flex items-center gap-6 border border-slate-800 shadow-soft group transition-all">
+              <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-rose-600 transition-colors">
+                 <ShieldCheck size={24} className="text-rose-400 group-hover:text-white" />
               </div>
-              <div className="space-y-1 relative z-10">
-                 <h4 className="text-xl font-black uppercase tracking-tight">Doctor Help</h4>
-                 <p className="text-sm font-medium text-slate-400 uppercase tracking-wider leading-relaxed">Serious problem? Call a local Vet immediately.</p>
+              <div className="space-y-0.5">
+                 <h4 className="text-sm font-bold uppercase tracking-tight">Need a Vet?</h4>
+                 <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Serious problem? Call a local Vet.</p>
               </div>
            </div>
         </div>
 
         {/* Results - Right Side */}
-        <div className="xl:col-span-7 space-y-10">
-          <div className="flex items-center gap-4 pb-4 border-b border-slate-100">
-             <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center text-rose-500 shadow-sm">
+        <div className="lg:col-span-8 space-y-6">
+          <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-soft flex items-center gap-4">
+             <div className="w-10 h-10 bg-rose-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-rose-100">
                 <Activity size={20} />
              </div>
-             <h2 className="text-lg font-black text-slate-900 uppercase tracking-tight">Check Result</h2>
+             <h2 className="text-lg font-bold text-slate-900 tracking-tight leading-none">Analysis Results</h2>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {results ? (
               results.length > 0 ? (
                 results.map((r, i) => (
-                  <div key={i} className={`group relative bg-white border rounded-[3rem] p-10 transition-all overflow-hidden flex flex-col hover:-translate-y-2 ${
-                    i===0 ? 'border-rose-100 shadow-xl ring-4 ring-rose-50' : 'border-slate-100 shadow-lg'
-                  }`}>
-                    
-                    {/* Color Bar */}
-                    <div className={`absolute top-0 left-0 w-full h-3 ${
+                  <div key={i} className="group bg-white border border-slate-100 rounded-[2.5rem] p-10 shadow-soft hover:shadow-strong transition-all overflow-hidden flex flex-col relative">
+                    <div className={`absolute top-0 left-0 w-2 h-full ${
                        r.riskLevel === 'Critical' ? 'bg-rose-600' : 
                        r.riskLevel === 'High' ? 'bg-orange-500' : 'bg-amber-400'
                     }`}></div>
                     
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-8 relative z-10">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-8">
                       <div className="space-y-2">
                         <div className="flex items-center gap-3">
-                           <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider border ${
+                           <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
                              r.riskLevel === 'Critical' ? 'bg-rose-600 text-white border-rose-700' : 
                              r.riskLevel === 'High' ? 'bg-orange-500 text-white border-orange-600' : 'bg-amber-400 text-slate-900 border-amber-500'
                            }`}>
-                             {r.riskLevel} ALERT
+                             {r.riskLevel} Level
                            </span>
-                           <span className="text-xs font-black text-slate-300 uppercase tracking-wider">Result Found</span>
+                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Potential Disease</span>
                         </div>
-                        <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tight group-hover:text-rose-600 transition-colors">{r.disease}</h3>
+                        <h3 className="text-3xl font-extrabold text-slate-900 tracking-tight group-hover:text-rose-600 transition-colors uppercase">{r.disease}</h3>
                       </div>
                       
-                      <div className="bg-slate-50 px-8 py-5 rounded-3xl border border-slate-100 flex flex-col items-center">
-                         <span className="text-xs font-black text-slate-400 uppercase tracking-wider mb-1 italic">Match Score</span>
-                         <span className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-1">
-                           {r.confidence} <span className="text-xs text-rose-500/50">%</span>
+                      <div className="bg-slate-50 px-6 py-4 rounded-2xl border border-slate-100 flex flex-col items-center">
+                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Confidence</span>
+                         <span className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                           {r.confidence}%
                          </span>
                       </div>
                     </div>
 
-                    <div className="bg-slate-900 rounded-[2rem] p-8 border border-slate-800 space-y-6 relative z-10">
-                      <div className="flex items-start gap-6">
-                         <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-rose-500 shrink-0">
-                            <ShieldAlert size={24} />
+                    <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-4">
+                      <div className="flex items-start gap-4">
+                         <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-rose-500 shrink-0">
+                            <ShieldAlert size={20} />
                          </div>
-                         <div className="space-y-3">
-                            <div className="flex items-center gap-2">
-                               <TrendingUp size={12} className="text-rose-500" />
-                               <p className="text-sm font-black text-rose-400 uppercase tracking-wider">How to fix this :</p>
-                            </div>
-                            <p className="text-white font-bold text-xl lg:text-2xl leading-tight">{r.action}</p>
+                         <div className="space-y-2">
+                            <p className="text-[10px] font-bold text-rose-400 uppercase tracking-widest">Recommended Action</p>
+                            <p className="text-white font-bold text-lg leading-snug">{r.action}</p>
                          </div>
                       </div>
-                    </div>
-                    
-                    <div className="mt-8 flex items-center justify-between">
-                       <div className="flex items-center gap-3">
-                          <Waves size={16} className="text-rose-500 animate-pulse" />
-                          <span className="text-xs font-black text-slate-300 uppercase tracking-wider italic">Analysis Done</span>
-                       </div>
-                       <button className="h-12 px-6 rounded-xl bg-slate-50 text-slate-900 text-sm font-black uppercase tracking-wider flex items-center gap-3 hover:bg-slate-900 hover:text-white transition-all">
-                          See Details <ArrowRight size={16} />
-                       </button>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="bg-slate-50 rounded-[3rem] p-24 text-center border-2 border-dashed border-slate-200 flex flex-col items-center gap-8">
-                  <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-slate-200 shadow-lg">
-                     <AlertTriangle size={40} className="text-slate-300" />
+                <div className="bg-slate-50 rounded-[2.5rem] p-20 text-center border-2 border-dashed border-slate-200 flex flex-col items-center gap-6">
+                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-slate-200 shadow-soft">
+                     <AlertTriangle size={32} className="text-slate-300" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">No matching disease found</h3>
-                    <p className="text-slate-400 font-bold text-sm uppercase tracking-wider max-w-sm mx-auto leading-relaxed">Could not identify a disease. Please provide more signs or try generic medicine.</p>
+                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">No match found</h3>
+                    <p className="text-slate-400 font-bold text-xs uppercase tracking-widest max-w-xs mx-auto leading-relaxed">Please provide more symptoms or consult a veterinarian.</p>
                   </div>
                 </div>
               )
             ) : (
-               <div className="h-full min-h-[400px] bg-slate-50/50 border-2 border-dashed border-slate-100 rounded-[3rem] flex flex-col items-center justify-center p-12 text-center group">
-                 <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center text-slate-200 mb-8 shadow-inner group-hover:scale-105 transition-transform">
-                    <Scan size={48} className="opacity-10 group-hover:opacity-30" />
+               <div className="h-full min-h-[400px] bg-slate-50/30 border-2 border-dashed border-slate-100 rounded-[2.5rem] flex flex-col items-center justify-center p-12 text-center group">
+                 <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-slate-200 mb-6 shadow-soft group-hover:scale-105 transition-transform">
+                    <Scan size={32} className="opacity-20 group-hover:opacity-40" />
                  </div>
-                 <h3 className="text-2xl font-black text-slate-300 uppercase tracking-tight italic">Waiting for you to select signs...</h3>
-                 <div className="flex items-center gap-3 mt-6">
-                    <div className="w-1.5 h-1.5 bg-slate-200 rounded-full animate-bounce"></div>
-                    <div className="w-1.5 h-1.5 bg-slate-200 rounded-full animate-bounce delay-75"></div>
-                    <div className="w-1.5 h-1.5 bg-slate-200 rounded-full animate-bounce delay-150"></div>
-                 </div>
-                 <p className="text-slate-200 font-black text-xs uppercase tracking-wider mt-8">Ready for check</p>
+                 <h3 className="text-xl font-bold text-slate-300 tracking-tight italic">Waiting for your selection...</h3>
+                 <p className="text-slate-200 font-bold text-[10px] uppercase tracking-widest mt-4">Kisan Mitra AI is ready</p>
                </div>
             )}
           </div>

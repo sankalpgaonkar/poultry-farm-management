@@ -80,125 +80,120 @@ export default function ProfitAnalyzer() {
   return (
     <div className="space-y-12 pb-20">
       
-      {/* Simple Header */}
-      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-10">
-        <div className="space-y-4 max-w-3xl">
-           <div className="inline-flex items-center gap-3 px-5 py-3 bg-emerald-50 rounded-full border border-emerald-100">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-black uppercase tracking-wider text-emerald-600">Money Calculator</span>
+      {/* Balanced Header */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-soft relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50/50 rounded-full translate-x-32 -translate-y-32 blur-3xl text-emerald-100 opacity-20">
+           <Calculator size={200} />
+        </div>
+        
+        <div className="space-y-4 relative z-10">
+           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 rounded-full border border-emerald-100">
+              <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600">Earnings Check</span>
            </div>
-           <h1 className="text-4xl lg:text-7xl font-black text-slate-900 tracking-tight uppercase leading-tight">
-              Profit <span className="text-emerald-600">Check.</span>
+           <h1 className="text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              Profit <span className="text-emerald-600">Calculator</span>
            </h1>
-           <p className="text-slate-500 font-medium text-xl leading-relaxed max-w-2xl">
-             Enter your farm numbers below to see if you are making a profit. We will also give you tips to grow your business.
+           <p className="text-slate-500 font-medium text-sm leading-relaxed max-w-xl">
+             Enter your daily numbers below to see your earnings. We'll help you understand where your money is going.
            </p>
         </div>
         
-        <div className="flex items-center gap-6">
-           <div className="h-24 px-10 bg-slate-900 border border-slate-800 rounded-3xl shadow-xl flex items-center gap-6">
-              <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-emerald-400">
-                 <Calculator size={24} />
-              </div>
-              <div className="space-y-0.5">
-                 <span className="text-xs font-black uppercase text-slate-500 tracking-wider leading-none">Calculator</span>
-                 <h4 className="text-sm font-black text-white tracking-tight uppercase">Ready for Math</h4>
-              </div>
+        <div className="flex items-center gap-4 relative z-10">
+           <div className="h-14 px-6 bg-slate-900 rounded-xl flex items-center gap-3 shadow-lg">
+              <Calculator size={18} className="text-emerald-400" />
+              <span className="text-xs font-bold text-white uppercase tracking-widest">Active Calculator</span>
            </div>
         </div>
       </div>
 
+
       <div className="grid xl:grid-cols-12 gap-12">
         
         {/* Input Side */}
-        <div className="xl:col-span-5 space-y-12">
-           <div className="bg-white border border-slate-100 rounded-[4rem] p-14 md:p-16 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-16 opacity-[0.02] pointer-events-none">
-                 <Cpu size={250} />
-              </div>
-              
+        <div className="xl:col-span-5 space-y-8">
+           <div className="bg-white border border-slate-100 rounded-[3rem] p-10 md:p-12 shadow-soft relative overflow-hidden">
               <div className="flex justify-between items-center mb-10 relative z-10">
-                 <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight flex items-center gap-3">
-                    My Daily Numbers <Target size={22} className="text-emerald-400" />
+                 <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    Today's Numbers <Target size={20} className="text-emerald-500" />
                  </h2>
               </div>
               
               <form onSubmit={calculate} className="space-y-8 relative z-10">
-                <div className="grid grid-cols-2 gap-12">
-                   <div className="space-y-6">
-                      <label className="text-farmer-label">Number of Birds</label>
+                <div className="grid grid-cols-2 gap-8">
+                   <div className="space-y-4">
+                      <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">Number of Birds</label>
                       <input 
                         name="birdsCount" 
                         value={formData.birdsCount} 
                         onChange={handleChange}
-                        className="w-full bg-slate-50 border border-slate-200 h-24 rounded-[2rem] focus:ring-8 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-black text-3xl text-slate-900 transition-all text-center px-6"
+                        className="w-full bg-slate-50 border border-slate-200 h-16 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-bold text-2xl text-slate-900 transition-all text-center px-4"
                         placeholder="0"
                       />
                    </div>
-                   <div className="space-y-6">
-                      <label className="text-farmer-label">Total Eggs Today</label>
+                   <div className="space-y-4">
+                      <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">Eggs Collected</label>
                       <input 
                         name="dailyEggProduction" 
                         value={formData.dailyEggProduction} 
                         onChange={handleChange}
-                        className="w-full bg-slate-50 border border-slate-200 h-24 rounded-[2rem] focus:ring-8 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-black text-3xl text-slate-900 transition-all text-center px-6"
+                        className="w-full bg-slate-50 border border-slate-200 h-16 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-bold text-2xl text-slate-900 transition-all text-center px-4"
                         placeholder="0"
                       />
                    </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-12">
+                <div className="grid grid-cols-2 gap-8">
                    <div className="space-y-4">
-                      <label className="block text-sm font-black uppercase text-slate-400 tracking-wider px-2">Feed Used (kg)</label>
+                      <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">Feed Used (kg)</label>
                       <input 
                         name="dailyFeedKg" 
                         step="0.1"
                         value={formData.dailyFeedKg} 
                         onChange={handleChange}
-                        className="w-full bg-slate-50 border border-slate-200 h-20 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-black text-xl text-slate-900 transition-all text-center px-4"
+                        className="w-full bg-slate-50 border border-slate-200 h-16 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-bold text-lg text-slate-900 transition-all text-center px-4"
                         placeholder="0.0"
                       />
                    </div>
                    <div className="space-y-4">
-                      <label className="block text-sm font-black uppercase text-slate-400 tracking-wider px-2">Feed Price (₹/kg)</label>
+                      <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">Feed Price (₹/kg)</label>
                       <div className="relative">
-                         <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-emerald-500 text-xl">₹</span>
+                         <span className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-emerald-600 text-lg">₹</span>
                          <input 
                            name="feedCostPerKg" 
                            step="0.01"
                            value={formData.feedCostPerKg} 
                            onChange={handleChange}
-                           className="w-full bg-slate-50 border border-slate-200 h-20 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-black text-xl text-slate-900 transition-all pl-12 pr-4"
+                           className="w-full bg-slate-50 border border-slate-200 h-16 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-bold text-lg text-slate-900 transition-all pl-10 pr-4"
                            placeholder="0.00"
                          />
                       </div>
                    </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-12">
+                <div className="grid grid-cols-2 gap-8">
                    <div className="space-y-4">
-                      <label className="block text-sm font-black uppercase text-slate-400 tracking-wider px-2">Sale Price (₹/Egg)</label>
+                      <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">Egg Sale Price (₹)</label>
                       <div className="relative">
-                         <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-emerald-500 text-xl">₹</span>
+                         <span className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-emerald-600 text-lg">₹</span>
                          <input 
                            name="eggSalePrice" 
                            step="0.01"
                            value={formData.eggSalePrice} 
                            onChange={handleChange}
-                           className="w-full bg-slate-50 border border-slate-200 h-20 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-black text-xl text-slate-900 transition-all pl-12 pr-4"
+                           className="w-full bg-slate-50 border border-slate-200 h-16 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-bold text-lg text-slate-900 transition-all pl-10 pr-4"
                            placeholder="0.00"
                          />
                       </div>
                    </div>
                    <div className="space-y-4">
-                      <label className="block text-sm font-black uppercase text-slate-400 tracking-wider px-2">Other Costs Today</label>
+                      <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">Labor/Other Costs (₹)</label>
                       <div className="relative">
-                         <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-emerald-500 text-xl">₹</span>
+                         <span className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-emerald-600 text-lg">₹</span>
                          <input 
                            name="laborCostDaily" 
                            value={formData.laborCostDaily} 
                            onChange={handleChange}
-                           className="w-full bg-slate-50 border border-slate-200 h-20 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-black text-xl text-slate-900 transition-all pl-12 pr-4"
+                           className="w-full bg-slate-50 border border-slate-200 h-16 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none focus:border-emerald-500 font-bold text-lg text-slate-900 transition-all pl-10 pr-4"
                            placeholder="0"
                          />
                       </div>
@@ -208,51 +203,52 @@ export default function ProfitAnalyzer() {
                 <button 
                   type="submit" 
                   disabled={loading}
-                  className="w-full h-24 bg-slate-900 text-white rounded-[2rem] font-black text-sm uppercase tracking-wider shadow-xl enabled:hover:bg-emerald-600 enabled:hover:-translate-y-1 transition-all flex items-center justify-center gap-4 group disabled:opacity-30"
+                  className="w-full h-16 bg-slate-900 text-white rounded-2xl font-bold text-sm uppercase tracking-wider shadow-md enabled:hover:bg-emerald-600 enabled:hover:-translate-y-0.5 transition-all flex items-center justify-center gap-3 group disabled:opacity-30"
                 >
                    {loading ? (
-                     <Loader2 className="w-6 h-6 animate-spin text-emerald-400" />
+                     <Loader2 className="w-5 h-5 animate-spin text-emerald-400" />
                    ) : (
-                     <><ShieldCheck size={24} className="text-emerald-400" /> Check Profit</>
+                     <><Calculator size={20} className="text-emerald-400" /> Check My Profit</>
                    )}
                 </button>
               </form>
            </div>
         </div>
 
+
         {/* Results Side */}
-        <div className="xl:col-span-7 space-y-10">
+        <div className="xl:col-span-7 space-y-8">
             {result ? (
-              <div className="space-y-10 animate-in fade-in slide-in-from-bottom-8 duration-700">
+              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-500">
                  {/* Success/Warning Card */}
-                 <div className={`relative overflow-hidden rounded-[3rem] p-12 text-white shadow-xl ${result.breakdown.dailyProfit >= 0 ? 'bg-emerald-600' : 'bg-rose-600'}`}>
-                    <div className="absolute top-0 right-0 p-16 opacity-10 pointer-events-none">
-                       {result.breakdown.dailyProfit >= 0 ? <TrendingUp size={180} /> : <TrendingDown size={180} />}
+                 <div className={`relative overflow-hidden rounded-[2.5rem] p-10 text-white shadow-lg ${result.breakdown.dailyProfit >= 0 ? 'bg-emerald-600' : 'bg-rose-600'}`}>
+                    <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
+                       {result.breakdown.dailyProfit >= 0 ? <TrendingUp size={120} /> : <TrendingDown size={120} />}
                     </div>
                     
-                    <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
-                       <div className="space-y-6">
-                          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10">
-                             {result.breakdown.dailyProfit >= 0 ? <Activity className="text-emerald-300 animate-pulse" size={14} /> : <AlertTriangle className="text-rose-300 animate-pulse" size={14} />}
-                             <span className="text-sm font-black uppercase tracking-wider">
-                                {result.breakdown.dailyProfit >= 0 ? 'Good Profit Today!' : 'Losing Money Today!'}
+                    <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                       <div className="space-y-4">
+                          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
+                             <span className="text-[10px] font-bold uppercase tracking-wider">
+                                Daily Status
                              </span>
                           </div>
-                          <div className="space-y-1">
-                             <p className="text-sm font-black uppercase tracking-wider opacity-70">Daily Profit</p>
-                             <h3 className="text-7xl font-black tracking-tight tabular-nums">{formatRupee(result.breakdown.dailyProfit)}</h3>
+                          <div className="space-y-0.5">
+                             <p className="text-[10px] font-bold uppercase tracking-wider opacity-70">My Profit Today</p>
+                             <h3 className="text-5xl font-extrabold tracking-tight tabular-nums">{formatRupee(result.breakdown.dailyProfit)}</h3>
                           </div>
                        </div>
                        
-                       <div className="bg-slate-900/20 backdrop-blur-lg p-8 rounded-3xl border border-white/5 min-w-[200px]">
-                          <p className="text-sm font-black uppercase tracking-wider opacity-60 mb-2 leading-none">Profit Margin</p>
-                          <p className="text-4xl font-black tracking-tight tabular-nums">{ (result.breakdown.dailyProfit / (result.breakdown.totalDailyRevenue || 1) * 100).toFixed(1) }<span className="text-xl opacity-40 ml-1">%</span></p>
-                          <div className="h-1.5 w-full bg-white/10 rounded-full mt-4 overflow-hidden">
+                       <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl border border-white/10 min-w-[180px]">
+                          <p className="text-[10px] font-bold uppercase tracking-wider opacity-60 mb-2">Profit Margin</p>
+                          <p className="text-3xl font-extrabold tracking-tight tabular-nums">{ (result.breakdown.dailyProfit / (result.breakdown.totalDailyRevenue || 1) * 100).toFixed(1) }<span className="text-lg opacity-40 ml-0.5">%</span></p>
+                          <div className="h-1.5 w-full bg-white/10 rounded-full mt-3 overflow-hidden">
                              <div className="h-full bg-white rounded-full transition-all duration-1000" style={{ width: `${Math.min(Math.max((result.breakdown.dailyProfit / (result.breakdown.totalDailyRevenue || 1) * 100), 0), 100)}%` }}></div>
                           </div>
                        </div>
                     </div>
                  </div>
+
 
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Cost Chart */}

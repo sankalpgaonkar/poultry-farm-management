@@ -59,37 +59,11 @@ const deleteInventoryItem = async (req, res) => {
 const bulkAddInventoryItems = async (req, res) => {
   try {
     const { items } = req.body;
-    if (!Array.isArray(items)) {
-      return res.status(400).json({ message: 'Invalid items data' });
-    }
-
+    const { updateOrCreateStock } = require('../utils/inventorySync');
     const createdItems = [];
     for (const itemData of items) {
-      // Try to find existing item to update quantity, or create new
-      let item = await Inventory.findOne({ 
-        farmer: req.user._id, 
-        itemName: new RegExp(`^${itemData.itemName}$`, 'i') 
-      });
-
-      if (item) {
-        item.quantity += Number(itemData.quantity);
-        if (itemData.category) item.category = itemData.category;
-        if (itemData.unit) item.unit = itemData.unit;
-        await item.save();
-        createdItems.push(item);
-      } else {
-        const newItem = new Inventory({
-          farmer: req.user._id,
-          itemName: itemData.itemName,
-          category: itemData.category || 'Other',
-          quantity: Number(itemData.quantity),
-          unit: itemData.unit || 'kg',
-          lowStockThreshold: itemData.lowStockThreshold || 10,
-          dailyConsumptionRate: itemData.dailyConsumptionRate || 0
-        });
-        await newItem.save();
-        createdItems.push(newItem);
-      }
+      const item = await updateOrCreateStock(req.user._id, itemData);
+      createdItems.push(item);
     }
 
     res.status(201).json(createdItems);

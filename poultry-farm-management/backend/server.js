@@ -102,11 +102,27 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
+// Simple request logger
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
+
 const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('[Global Error]:', err.stack);
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode).json({
+    message: err.message || 'An unexpected error occurred on the server.',
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+  });
+});
 
 module.exports = app;

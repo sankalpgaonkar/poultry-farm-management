@@ -52,35 +52,15 @@ const receiveSupplyOrder = async (req, res) => {
       return res.status(400).json({ message: 'Order already marked as delivered' });
     }
 
+    const { updateOrCreateStock } = require('../utils/inventorySync');
+
     // Update stock levels in Inventory
     const inventoryUpdates = order.items.map(async (item) => {
-      // Map store categories to inventory categories
-      let invCategory = 'Other';
-      if (['Feed', 'Medicine', 'Equipment'].includes(item.category)) {
-        invCategory = item.category;
-      }
-
-      // Try to find existing inventory item
-      let inventoryItem = await Inventory.findOne({ 
-        farmer: req.user._id, 
-        itemName: item.name 
+      return await updateOrCreateStock(req.user._id, {
+        itemName: item.name,
+        category: ['Feed', 'Medicine', 'Equipment'].includes(item.category) ? item.category : 'Other',
+        quantity: item.quantity
       });
-
-      if (inventoryItem) {
-        inventoryItem.quantity += item.quantity;
-        return await inventoryItem.save();
-      } else {
-        // Create new inventory item
-        const newInventoryItem = new Inventory({
-          farmer: req.user._id,
-          itemName: item.name,
-          category: invCategory,
-          quantity: item.quantity,
-          unit: item.name.toLowerCase().includes('kg') ? 'kg' : (item.name.toLowerCase().includes('liter') ? 'liters' : 'units'),
-          lowStockThreshold: 10
-        });
-        return await newInventoryItem.save();
-      }
     });
 
     await Promise.all(inventoryUpdates);
