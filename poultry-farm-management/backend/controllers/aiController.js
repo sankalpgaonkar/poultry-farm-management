@@ -104,20 +104,35 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    let processedHistory = [];
+    for (const h of history) {
+      const mappedRole = h.role === 'user' ? 'user' : 'model';
+      if (processedHistory.length === 0) {
+        if (mappedRole === 'user') {
+          processedHistory.push({ role: 'user', parts: [{ text: h.content }] });
+        }
+      } else {
+        const lastMsg = processedHistory[processedHistory.length - 1];
+        if (lastMsg.role === mappedRole) {
+          lastMsg.parts[0].text += "\n\n" + h.content;
+        } else {
+          processedHistory.push({ role: mappedRole, parts: [{ text: h.content }] });
+        }
+      }
+    }
+
+    if (processedHistory.length > 0 && processedHistory[processedHistory.length - 1].role === 'user') {
+      processedHistory[processedHistory.length - 1].parts[0].text += "\n\n" + message;
+    } else {
+      processedHistory.push({ role: 'user', parts: [{ text: message }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: processedHistory,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
