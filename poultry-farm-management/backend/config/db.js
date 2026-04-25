@@ -1,11 +1,5 @@
 const mongoose = require('mongoose');
 
-const mongoUri = process.env.MONGO_MONGODB_URI || process.env.MONGODB_URI || process.env.MONGO_URI;
-
-if (!mongoUri && (process.env.NODE_ENV === 'production' || process.env.VERCEL)) {
-  console.error('CRITICAL: No MongoDB URI found in environment (tried MONGO_MONGODB_URI, MONGODB_URI, MONGO_URI)');
-}
-
 let cached = global.mongoose;
 
 if (!cached) {
@@ -18,7 +12,25 @@ const connectDB = async () => {
   }
 
   if (!cached.promise) {
-    const finalUri = mongoUri || 'mongodb://localhost:27017/poultry-farm';
+    let finalUri = process.env.MONGO_MONGODB_URI || process.env.MONGODB_URI || process.env.MONGO_URI;
+
+    if (!finalUri) {
+      if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+         try {
+            const { MongoMemoryServer } = require('mongodb-memory-server');
+            if (!global.__MONGO_SERVER__) {
+               global.__MONGO_SERVER__ = await MongoMemoryServer.create();
+            }
+            finalUri = global.__MONGO_SERVER__.getUri();
+            console.log(`[DB] Using in-memory database: ${finalUri}`);
+         } catch(e) {
+            finalUri = 'mongodb://localhost:27017/poultry-farm';
+         }
+      } else {
+         finalUri = 'mongodb://localhost:27017/poultry-farm';
+      }
+    }
+
     console.log(`[DB] Init MongoDB connection to: ${finalUri.split('@').pop()}`);
     
     cached.promise = mongoose.connect(finalUri, {
