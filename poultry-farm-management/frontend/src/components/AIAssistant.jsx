@@ -16,7 +16,8 @@ import {
   Activity,
   ArrowRight,
   TrendingUp,
-  Cpu
+  Cpu,
+  ShieldCheck
 } from 'lucide-react';
 import api from '../utils/axios';
 
