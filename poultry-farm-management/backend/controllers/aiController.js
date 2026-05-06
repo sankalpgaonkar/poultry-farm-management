@@ -104,20 +104,40 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    let formattedHistory = [];
+    for (const h of history) {
+      const role = h.role === 'user' ? 'user' : 'model';
+
+      if (formattedHistory.length > 0 && formattedHistory[formattedHistory.length - 1].role === role) {
+        formattedHistory[formattedHistory.length - 1].parts[0].text += "\n\n" + h.content;
+      } else {
+        formattedHistory.push({
+          role: role,
+          parts: [{ text: h.content }]
+        });
+      }
+    }
+
+    if (formattedHistory.length > 0 && formattedHistory[formattedHistory.length - 1].role === 'user') {
+      formattedHistory[formattedHistory.length - 1].parts[0].text += "\n\n" + message;
+    } else {
+      formattedHistory.push({
+        role: 'user',
+        parts: [{ text: message }]
+      });
+    }
+
+    // Ensure the conversation starts with a user message
+    if (formattedHistory.length > 0 && formattedHistory[0].role !== 'user') {
+      formattedHistory.unshift({ role: 'user', parts: [{ text: 'Hello' }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: formattedHistory,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
