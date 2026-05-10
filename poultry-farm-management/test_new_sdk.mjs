@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 dotenv.config({ path: "./backend/.env" });
 
-const ai = new GoogleGenAI({ apiKey: process.env.AIzaSyCfJa0JPJnVzG_-KygFfqEuM0ZeqUG7h_k });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 async function main() {
   try {
