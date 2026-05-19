@@ -104,20 +104,45 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    // History must strictly alternate between user and model, starting with user.
+    let formattedHistory = [];
+    let currentRole = null;
+
+    for (const msg of history) {
+      const role = msg.role === 'user' ? 'user' : 'model';
+      const text = msg.content || "";
+
+      if (formattedHistory.length === 0) {
+        if (role !== 'user') {
+          // API expects conversation to start with user
+          formattedHistory.push({ role: 'user', parts: [{ text: "Hello" }] });
+        }
+        formattedHistory.push({ role, parts: [{ text }] });
+        currentRole = role;
+      } else {
+        if (role === currentRole) {
+          formattedHistory[formattedHistory.length - 1].parts[0].text += "\n" + text;
+        } else {
+          formattedHistory.push({ role, parts: [{ text }] });
+          currentRole = role;
+        }
+      }
+    }
+
+    // New message is from user
+    if (formattedHistory.length > 0 && currentRole === 'user') {
+      // If the last message was user, we combine it to maintain alternation
+      formattedHistory[formattedHistory.length - 1].parts[0].text += "\n" + message;
+    } else {
+      formattedHistory.push({ role: 'user', parts: [{ text: message }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: formattedHistory,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
