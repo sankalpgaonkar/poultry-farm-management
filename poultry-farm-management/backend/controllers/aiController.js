@@ -105,9 +105,7 @@ const chatWithAssistant = async (req, res) => {
 
     // Map history for Gemini (user/model)
     // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
+    const rawHistory = [
       ...history.map(h => ({
         role: h.role === 'user' ? 'user' : 'model',
         parts: [{ text: h.content }]
@@ -115,9 +113,32 @@ const chatWithAssistant = async (req, res) => {
       { role: 'user', parts: [{ text: message }] }
     ];
 
+    // Ensure strictly alternating roles starting with 'user'
+    const contents = [];
+    for (const h of rawHistory) {
+      if (contents.length === 0) {
+        if (h.role !== 'user') {
+          // Force start with user
+          contents.push({ role: 'user', parts: [{ text: "Hello" }] });
+        }
+        contents.push(h);
+      } else {
+        const last = contents[contents.length - 1];
+        if (last.role === h.role) {
+          // Collapse consecutive identical roles
+          last.parts.push(...h.parts);
+        } else {
+          contents.push(h);
+        }
+      }
+    }
+
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction,
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
