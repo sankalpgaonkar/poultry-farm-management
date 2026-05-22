@@ -104,20 +104,44 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
+    let processedHistory = history.map(h => ({
+      role: h.role === 'user' ? 'user' : 'model',
+      parts: [{ text: h.content }]
+    }));
+
+    // Collapse consecutive messages with the same role
+    const collapsedHistory = [];
+    for (const msg of processedHistory) {
+      if (collapsedHistory.length > 0 && collapsedHistory[collapsedHistory.length - 1].role === msg.role) {
+        collapsedHistory[collapsedHistory.length - 1].parts.push(...msg.parts);
+      } else {
+        collapsedHistory.push(msg);
+      }
+    }
+
+    // Ensure the conversation starts with a 'user' role if there's history
+    if (collapsedHistory.length > 0 && collapsedHistory[0].role !== 'user') {
+      collapsedHistory.unshift({ role: 'user', parts: [{ text: "Hello" }] });
+    }
+
     const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
+      ...collapsedHistory,
+      // If the last history message was a user message, we need to collapse this new user message into it,
+      // or we can just append it if we handle collapsing again.
     ];
+
+    if (contents.length > 0 && contents[contents.length - 1].role === 'user') {
+       contents[contents.length - 1].parts.push({ text: message });
+    } else {
+       contents.push({ role: 'user', parts: [{ text: message }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
