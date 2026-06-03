@@ -104,20 +104,41 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    // Format the history strictly alternating between 'user' and 'model'
+    let formattedContents = [];
+    let lastRole = null;
+
+    for (const h of history) {
+      let currentRole = h.role === 'user' ? 'user' : 'model';
+
+      if (formattedContents.length === 0 && currentRole === 'model') {
+          formattedContents.push({ role: 'user', parts: [{ text: 'Hello' }] });
+          lastRole = 'user';
+      }
+
+      if (currentRole === lastRole) {
+          formattedContents[formattedContents.length - 1].parts[0].text += '\n' + h.content;
+      } else {
+          formattedContents.push({
+              role: currentRole,
+              parts: [{ text: h.content }]
+          });
+          lastRole = currentRole;
+      }
+    }
+
+    if (lastRole === 'user') {
+      formattedContents[formattedContents.length - 1].parts[0].text += '\n' + message;
+    } else {
+      formattedContents.push({ role: 'user', parts: [{ text: message }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: formattedContents,
+      config: {
+        systemInstruction: systemInstruction,
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
