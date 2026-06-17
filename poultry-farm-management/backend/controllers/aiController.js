@@ -104,20 +104,49 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    // In this newer SDK, we pass systemInstruction in config
+    let formattedHistory = [];
+
+    // Ensure alternating 'user' and 'model' history, starting with 'user'
+    let lastRole = null;
+    for (const h of history) {
+      let role = h.role === 'user' ? 'user' : 'model';
+
+      // We must start with a 'user' role
+      if (formattedHistory.length === 0 && role !== 'user') {
+        continue;
+      }
+
+      if (role === lastRole) {
+        // Concatenate if same role consecutively (to ensure strict alternation)
+        formattedHistory[formattedHistory.length - 1].parts[0].text += "\n" + h.content;
+      } else {
+        formattedHistory.push({
+          role: role,
+          parts: [{ text: h.content }]
+        });
+        lastRole = role;
+      }
+    }
+
+    // Check if the current message matches the last role
+    if (lastRole === 'user') {
+      formattedHistory[formattedHistory.length - 1].parts[0].text += "\n" + message;
+    } else {
+      formattedHistory.push({
+        role: 'user',
+        parts: [{ text: message }]
+      });
+    }
+
+    const contents = formattedHistory;
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
