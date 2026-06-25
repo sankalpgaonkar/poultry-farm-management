@@ -104,10 +104,7 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
+    const rawHistory = [
       ...history.map(h => ({
         role: h.role === 'user' ? 'user' : 'model',
         parts: [{ text: h.content }]
@@ -115,9 +112,22 @@ const chatWithAssistant = async (req, res) => {
       { role: 'user', parts: [{ text: message }] }
     ];
 
+    // Collapse consecutive messages with the same role
+    const collapsedContents = [];
+    for (const item of rawHistory) {
+      if (collapsedContents.length > 0 && collapsedContents[collapsedContents.length - 1].role === item.role) {
+        collapsedContents[collapsedContents.length - 1].parts[0].text += "\n" + item.parts[0].text;
+      } else {
+        collapsedContents.push(item);
+      }
+    }
+
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: collapsedContents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
