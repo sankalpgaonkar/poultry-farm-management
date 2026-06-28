@@ -104,20 +104,35 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    const normalizedContents = [];
+
+    for (const h of history) {
+      const role = h.role === 'user' ? 'user' : 'model';
+      const text = h.content || "";
+
+      if (normalizedContents.length > 0 && normalizedContents[normalizedContents.length - 1].role === role) {
+        normalizedContents[normalizedContents.length - 1].parts[0].text += "\n\n" + text;
+      } else {
+        normalizedContents.push({ role, parts: [{ text }] });
+      }
+    }
+
+    if (normalizedContents.length > 0 && normalizedContents[normalizedContents.length - 1].role === 'user') {
+      normalizedContents[normalizedContents.length - 1].parts[0].text += "\n\n" + message;
+    } else {
+      normalizedContents.push({ role: 'user', parts: [{ text: message }] });
+    }
+
+    if (normalizedContents.length > 0 && normalizedContents[0].role === 'model') {
+      normalizedContents.unshift({ role: 'user', parts: [{ text: "Hello" }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: normalizedContents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
