@@ -104,10 +104,7 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
+    let rawContents = [
       ...history.map(h => ({
         role: h.role === 'user' ? 'user' : 'model',
         parts: [{ text: h.content }]
@@ -115,9 +112,36 @@ const chatWithAssistant = async (req, res) => {
       { role: 'user', parts: [{ text: message }] }
     ];
 
+    // Ensure alternating roles starting with 'user', collapsing consecutive roles
+    let collapsedContents = [];
+    let currentRole = null;
+    let currentParts = [];
+
+    for (let i = 0; i < rawContents.length; i++) {
+      if (rawContents[i].role === currentRole) {
+        currentParts.push(...rawContents[i].parts);
+      } else {
+        if (currentRole !== null) {
+          collapsedContents.push({ role: currentRole, parts: currentParts });
+        }
+        currentRole = rawContents[i].role;
+        currentParts = [...rawContents[i].parts];
+      }
+    }
+    if (currentRole !== null) {
+      collapsedContents.push({ role: currentRole, parts: currentParts });
+    }
+
+    if (collapsedContents.length > 0 && collapsedContents[0].role !== 'user') {
+      collapsedContents.unshift({ role: 'user', parts: [{ text: 'Hello' }] });
+    }
+
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: collapsedContents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
