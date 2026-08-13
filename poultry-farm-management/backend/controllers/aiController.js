@@ -103,21 +103,43 @@ const chatWithAssistant = async (req, res) => {
     Format each suggestion exactly like this: [[Suggest: Your Suggestion Here]]
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
-    // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
+    // Combine history and current message
+    let rawMessages = [
+      ...history.map(h => ({ role: h.role === 'user' ? 'user' : 'model', content: h.content })),
+      { role: 'user', content: message }
     ];
+
+    // Ensure it starts with user
+    while (rawMessages.length > 0 && rawMessages[0].role === 'model') {
+        rawMessages.shift();
+    }
+
+    // Ensure alternating roles starting with 'user'
+    const contents = [];
+    let currentRole = 'user';
+    let currentText = [];
+
+    for (const msg of rawMessages) {
+      if (msg.role === currentRole) {
+        currentText.push(msg.content);
+      } else {
+        if (currentText.length > 0) {
+          contents.push({ role: currentRole, parts: [{ text: currentText.join('\n\n') }] });
+        }
+        currentRole = msg.role;
+        currentText = [msg.content];
+      }
+    }
+    if (currentText.length > 0) {
+      contents.push({ role: currentRole, parts: [{ text: currentText.join('\n\n') }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
