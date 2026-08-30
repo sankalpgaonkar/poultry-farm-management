@@ -104,20 +104,38 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    const mappedHistory = history.map(h => ({
+      role: h.role === 'user' ? 'user' : 'model',
+      parts: [{ text: h.content }]
+    }));
+
+    const allMessages = [...mappedHistory, { role: 'user', parts: [{ text: message }] }];
+
+    // Collapse consecutive messages from the same role and ensure it starts with 'user'
+    let collapsedContents = [];
+    for (const msg of allMessages) {
+      if (collapsedContents.length === 0) {
+        collapsedContents.push(msg);
+      } else {
+        const last = collapsedContents[collapsedContents.length - 1];
+        if (last.role === msg.role) {
+          last.parts.push(...msg.parts);
+        } else {
+          collapsedContents.push(msg);
+        }
+      }
+    }
+
+    if (collapsedContents.length > 0 && collapsedContents[0].role !== 'user') {
+      collapsedContents.unshift({ role: 'user', parts: [{ text: "Hello" }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: collapsedContents,
+      config: {
+        systemInstruction: systemInstruction,
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
