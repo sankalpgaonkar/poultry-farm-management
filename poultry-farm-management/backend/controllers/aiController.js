@@ -104,20 +104,42 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
+    // Ensure chat history strictly alternates between 'user' and 'model' roles
+    const allMessages = [
+      ...history.map(h => ({ role: h.role === 'user' ? 'user' : 'model', content: h.content })),
+      { role: 'user', content: message }
     ];
+
+    let contents = [];
+    let currentRole = null;
+    let currentParts = [];
+
+    for (const msg of allMessages) {
+      if (msg.role !== currentRole) {
+        if (currentRole !== null) {
+          contents.push({ role: currentRole, parts: currentParts });
+        }
+        currentRole = msg.role;
+        currentParts = [{ text: msg.content }];
+      } else {
+        currentParts.push({ text: msg.content });
+      }
+    }
+    if (currentRole !== null) {
+      contents.push({ role: currentRole, parts: currentParts });
+    }
+
+    // Must start with user
+    if (contents.length > 0 && contents[0].role !== 'user') {
+      contents.unshift({ role: 'user', parts: [{ text: '(Empty start)' }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
