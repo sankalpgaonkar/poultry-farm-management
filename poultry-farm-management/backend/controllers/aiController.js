@@ -10,7 +10,7 @@ const initGenAI = async () => {
     try {
       const { GoogleGenAI } = await import("@google/genai");
       aiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-      aiModel = "gemini-2.0-flash"; // Upgraded to the latest high-performance model
+      aiModel = "gemini-2.5-flash"; // Upgraded to the latest high-performance model
     } catch (err) {
       console.error("Failed to initialize @google/genai:", err);
     }
@@ -104,20 +104,35 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
+    let rawContents = [
       ...history.map(h => ({
         role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
+        parts: [{ text: h.content || '' }]
       })),
-      { role: 'user', parts: [{ text: message }] }
+      { role: 'user', parts: [{ text: message || '' }] }
     ];
+
+    // Ensure the first message role is user
+    if (rawContents.length > 0 && rawContents[0].role !== 'user') {
+      rawContents.unshift({ role: 'user', parts: [{ text: 'Hello' }] });
+    }
+
+    // Collapse consecutive identical roles
+    const contents = [];
+    for (const msg of rawContents) {
+      if (contents.length > 0 && contents[contents.length - 1].role === msg.role) {
+        contents[contents.length - 1].parts[0].text += '\n\n' + msg.parts[0].text;
+      } else {
+        contents.push(msg);
+      }
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
