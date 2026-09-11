@@ -105,19 +105,46 @@ const chatWithAssistant = async (req, res) => {
 
     // Map history for Gemini (user/model)
     // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    const rawContents = [];
+
+    for (let h of history) {
+        let lastRole = rawContents.length > 0 ? rawContents[rawContents.length - 1].role : null;
+        let role = h.role === 'user' ? 'user' : 'model';
+
+        if (role === lastRole) {
+            rawContents[rawContents.length - 1].parts[0].text += '\n' + h.content;
+        } else {
+            rawContents.push({
+                role: role,
+                parts: [{ text: h.content }]
+            });
+        }
+    }
+
+    let lastRole = rawContents.length > 0 ? rawContents[rawContents.length - 1].role : null;
+    if (lastRole === 'user') {
+        rawContents[rawContents.length - 1].parts[0].text += '\n' + message;
+    } else {
+        rawContents.push({
+            role: 'user',
+            parts: [{ text: message }]
+        });
+    }
+
+    // Ensure it starts with user
+    if (rawContents.length > 0 && rawContents[0].role !== 'user') {
+        rawContents.unshift({ role: 'user', parts: [{ text: 'Hello' }] });
+    }
+    if (rawContents.length === 0) {
+        rawContents.push({ role: 'user', parts: [{ text: message }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      config: {
+          systemInstruction: systemInstruction,
+      },
+      contents: rawContents
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
