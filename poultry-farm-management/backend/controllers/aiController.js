@@ -103,21 +103,43 @@ const chatWithAssistant = async (req, res) => {
     Format each suggestion exactly like this: [[Suggest: Your Suggestion Here]]
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
-    // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    // Ensure history roles are strictly 'user' or 'model'
+    const rawHistory = history.map(h => ({
+      role: h.role === 'user' ? 'user' : 'model',
+      text: h.content || ''
+    }));
+    rawHistory.push({ role: 'user', text: message });
+
+    // Collapse consecutive messages with the same role
+    // and ensure the first message is from 'user'
+    let collapsedHistory = [];
+    for (const msg of rawHistory) {
+      if (collapsedHistory.length === 0) {
+        if (msg.role === 'model') {
+           continue; // drop leading 'model' messages
+        }
+        collapsedHistory.push({ role: msg.role, text: msg.text });
+      } else {
+        const lastMsg = collapsedHistory[collapsedHistory.length - 1];
+        if (lastMsg.role === msg.role) {
+          lastMsg.text += '\n' + msg.text;
+        } else {
+          collapsedHistory.push({ role: msg.role, text: msg.text });
+        }
+      }
+    }
+
+    const contents = collapsedHistory.map(h => ({
+      role: h.role,
+      parts: [{ text: h.text }]
+    }));
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
