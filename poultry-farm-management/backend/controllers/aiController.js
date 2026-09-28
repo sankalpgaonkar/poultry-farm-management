@@ -104,10 +104,7 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
+    const rawContents = [
       ...history.map(h => ({
         role: h.role === 'user' ? 'user' : 'model',
         parts: [{ text: h.content }]
@@ -115,9 +112,40 @@ const chatWithAssistant = async (req, res) => {
       { role: 'user', parts: [{ text: message }] }
     ];
 
+    // Collapse consecutive messages with the same role into a single message
+    const collapsedContents = [];
+    for (const msg of rawContents) {
+      if (collapsedContents.length > 0 && collapsedContents[collapsedContents.length - 1].role === msg.role) {
+        collapsedContents[collapsedContents.length - 1].parts[0].text += '\n' + msg.parts[0].text;
+      } else {
+        collapsedContents.push(msg);
+      }
+    }
+
+    // Ensure strictly alternating roles and first message is user
+    const contents = [];
+    let expectedRole = 'user';
+
+    for (const msg of collapsedContents) {
+      if (msg.role !== expectedRole) {
+         if (expectedRole === 'user') {
+            contents.push({ role: 'user', parts: [{ text: '[System: Please continue.]' }] });
+            expectedRole = 'model';
+         } else {
+            contents.push({ role: 'model', parts: [{ text: 'Understood.' }] });
+            expectedRole = 'user';
+         }
+      }
+      contents.push(msg);
+      expectedRole = msg.role === 'user' ? 'model' : 'user';
+    }
+
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
