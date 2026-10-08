@@ -104,20 +104,56 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    let mergedHistory = [];
+    let currentRole = null;
+    let currentContent = "";
+
+    for (const h of history) {
+      const role = h.role === 'user' ? 'user' : 'model';
+      if (currentRole === null) {
+          currentRole = role;
+          currentContent = h.content;
+      } else if (currentRole === role) {
+          currentContent += "\n" + h.content;
+      } else {
+          mergedHistory.push({
+            role: currentRole,
+            parts: [{ text: currentContent }]
+          });
+          currentRole = role;
+          currentContent = h.content;
+      }
+    }
+
+    if (currentRole !== null) {
+        mergedHistory.push({
+          role: currentRole,
+          parts: [{ text: currentContent }]
+        });
+    }
+
+    if (mergedHistory.length > 0 && mergedHistory[0].role !== 'user') {
+        mergedHistory.unshift({
+            role: 'user',
+            parts: [{ text: "Hello" }]
+        });
+    }
+
+    if (mergedHistory.length > 0 && mergedHistory[mergedHistory.length - 1].role === 'user') {
+        mergedHistory[mergedHistory.length - 1].parts[0].text += "\n" + message;
+    } else {
+        mergedHistory.push({
+            role: 'user',
+            parts: [{ text: message }]
+        });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: mergedHistory,
+      config: {
+        systemInstruction: systemInstruction
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
