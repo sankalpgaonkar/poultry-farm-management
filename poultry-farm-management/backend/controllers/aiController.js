@@ -104,20 +104,43 @@ const chatWithAssistant = async (req, res) => {
     Example: [[Suggest: How to reduce feed cost?]] [[Suggest: Signs of Marek's disease]] [[Suggest: Market price for eggs]]`;
 
     // Map history for Gemini (user/model)
-    // In this newer SDK, we can pass systemInstruction either in model init or prepended
-    const contents = [
-      { role: 'user', parts: [{ text: systemInstruction }] },
-      { role: 'model', parts: [{ text: "Understood. I am Kisan Mitra, your advisor. I will provide expert farming advice with smart suggestions at the end of every response." }] },
-      ...history.map(h => ({
-        role: h.role === 'user' ? 'user' : 'model',
-        parts: [{ text: h.content }]
-      })),
-      { role: 'user', parts: [{ text: message }] }
-    ];
+    let rawContents = history.map(h => ({
+      role: h.role === 'user' ? 'user' : 'model',
+      parts: [{ text: h.content }]
+    }));
+    rawContents.push({ role: 'user', parts: [{ text: message }] });
+
+    // Collapse consecutive identical roles
+    let collapsedContents = [];
+    for (let i = 0; i < rawContents.length; i++) {
+      if (collapsedContents.length === 0) {
+        if (rawContents[i].role === 'user') {
+          collapsedContents.push(rawContents[i]);
+        }
+      } else {
+        let last = collapsedContents[collapsedContents.length - 1];
+        if (last.role === rawContents[i].role) {
+          last.parts[0].text += '\n' + rawContents[i].parts[0].text;
+        } else {
+          collapsedContents.push(rawContents[i]);
+        }
+      }
+    }
+
+    // Ensure it starts with a user message
+    if (collapsedContents.length > 0 && collapsedContents[0].role !== 'user') {
+      collapsedContents.shift(); // Remove starting model message if any
+    }
+    if (collapsedContents.length === 0) {
+      collapsedContents.push({ role: 'user', parts: [{ text: message }] });
+    }
 
     const result = await aiClient.models.generateContent({
       model: aiModel,
-      contents: contents
+      contents: collapsedContents,
+      config: {
+        systemInstruction: systemInstruction,
+      }
     });
 
     res.json({ reply: result.text || "I am processing your request. Please try again." });
